@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Humora Integration Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Archivo', sans-serif;
+      background: #F9FAFB;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 48px 24px;
+      color: #0F0F0F;
+    }
+
+    .page-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #9CA3AF;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .card h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0F0F0F;
+      margin-bottom: 6px;
+    }
+
+    .card .subtitle {
+      font-size: 14px;
+      color: #9CA3AF;
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      height: 48px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 0 16px;
+      font-family: 'Archivo', sans-serif;
+      font-size: 14px;
+      color: #0F0F0F;
+      outline: none;
+      transition: border-color 180ms ease;
+    }
+
+    .field input:focus {
+      border-color: #4F46E5;
+    }
+
+    .field input::placeholder {
+      color: #D1D5DB;
+    }
+
+    .humora-section {
+      margin: 24px 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid #E5E7EB;
+    }
+
+    #submit-btn {
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: none;
+      background: #4F46E5;
+      color: #FFFFFF;
+      font-family: 'Archivo', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 200ms ease, opacity 200ms ease;
+      margin-top: 4px;
+    }
+
+    #submit-btn:disabled {
+      background: #E5E7EB;
+      color: #9CA3AF;
+      cursor: not-allowed;
+    }
+
+    #submit-btn:not(:disabled):hover {
+      background: #4338CA;
+    }
+
+    .success-banner {
+      display: none;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .success-banner.visible {
+      display: block;
+    }
+
+    .success-banner .success-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #10B981;
+      margin-bottom: 4px;
+    }
+
+    .success-banner .success-token {
+      font-size: 11px;
+      color: #6B7280;
+      word-break: break-all;
+      font-family: monospace;
+    }
+
+    .debug-card {
+      background: #1E1E2E;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .debug-card .debug-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #6B7280;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .debug-log {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .debug-log li {
+      font-family: monospace;
+      font-size: 12px;
+      color: #A6E3A1;
+      background: #313244;
+      border-radius: 8px;
+      padding: 10px 12px;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    .debug-log li.error {
+      color: #F38BA8;
+    }
+
+    .debug-log .empty {
+      color: #585B70;
+      font-style: italic;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EEF2FF;
+      border: 1px solid #C7D2FE;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #4F46E5;
+      margin-bottom: 24px;
+    }
+
+    .badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4F46E5;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <p class="page-title">Humora · Integration Test</p>
+
+  <div class="card">
+    <div class="badge">
+      <span class="dot"></span>
+      Live Widget Test
+    </div>
+    <h1>Create your account</h1>
+    <p class="subtitle">Complete verification to continue.</p>
+
+    <div class="field">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Jane Smith" />
+    </div>
+
+    <div class="field">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="jane@example.com" />
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="••••••••" />
+    </div>
+
+    <div class="humora-section">
+      <div id="humora-root"></div>
+    </div>
+
+    <input type="hidden" id="humora-token" value="" />
+
+    <button id="submit-btn" disabled>Create Account</button>
+
+    <div class="success-banner" id="success-banner">
+      <div class="success-title">✓ Account created successfully!</div>
+      <div class="success-token" id="success-token"></div>
+    </div>
+  </div>
+
+  <div class="debug-card">
+    <div class="debug-title">⬡ postMessage Debug Panel</div>
+    <ul class="debug-log" id="debug-log">
+      <li class="empty">Waiting for messages...</li>
+    </ul>
+  </div>
+
+  <script src="/dist/humora.min.js"></script>
+  <script>
+    const submitBtn = document.getElementById('submit-btn');
+    const tokenInput = document.getElementById('humora-token');
+    const successBanner = document.getElementById('success-banner');
+    const successToken = document.getElementById('success-token');
+    const debugLog = document.getElementById('debug-log');
+    let firstMessage = true;
+
+    function logDebug(data, isError) {
+      if (firstMessage) {
+        debugLog.innerHTML = '';
+        firstMessage = false;
+      }
+      const li = document.createElement('li');
+      if (isError) li.classList.add('error');
+      li.textContent = JSON.stringify(data, null, 2);
+      debugLog.prepend(li);
+    }
+
+    window.addEventListener('message', function (event) {
+      const data = event.data;
+      if (!data || data.source !== 'humora') return;
+
+      logDebug(data);
+
+      if (data.verified === true || data.verified === 'true') {
+        tokenInput.value = data.sessionId || ('humora_' + Date.now());
+        submitBtn.disabled = false;
+        submitBtn.style.background = '#4F46E5';
+        logDebug({ event: '✓ verified — button enabled' });
+      }
+
+      if (data.verified === false) {
+        tokenInput.value = '';
+        submitBtn.disabled = true;
+        logDebug({ event: '✗ failed — button disabled' }, true);
+      }
+    });
+
+    const poll = setInterval(function () {
+      if (tokenInput.value) {
+        submitBtn.disabled = false;
+        clearInterval(poll);
+      }
+    }, 500);
+
+    logDebug({ status: 'page loaded', timestamp: new Date().toISOString() });
+
+    submitBtn.addEventListener('click', function () {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const token = tokenInput.value;
+      if (!token) return;
+
+      successToken.textContent = 'Token: ' + token.slice(0, 80);
+      successBanner.classList.add('visible');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Account Created ✓';
+
+      logDebug({
+        event: 'form-submitted',
+        name,
+        email,
+        tokenPreview: token.slice(0, 40),
+      });
+    });
+  </script>
+</body>
+
+</html>
