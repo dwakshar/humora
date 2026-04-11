@@ -1,0 +1,840 @@
+{
+  "questions": [
+    {
+      "id": "q_001",
+      "category": "sensory_visceral",
+      "question": "You open the fridge and something smells off. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Close it and pretend it's not your problem",
+          "humanScore": 9
+        },
+        {
+          "id": "b",
+          "text": "Smell it again just to confirm how bad it is",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Check every item systematically",
+          "humanScore": 6
+        },
+        {
+          "id": "d",
+          "text": "Ask someone else to smell it first",
+          "humanScore": 10
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_002",
+      "category": "sensory_visceral",
+      "question": "Which of these is genuinely the worst physical feeling?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Wet socks squishing in your shoes",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Biting the inside of your cheek while eating",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "A mosquito bite you absolutely cannot scratch",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Stepping on a Lego in the dark",
+          "humanScore": 10
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_003",
+      "category": "sensory_visceral",
+      "question": "Pick the smell that hits you the hardest emotionally:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Rain hitting hot concrete in summer",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "The inside of an old paperback book",
+          "humanScore": 10
+        },
+        { "id": "c", "text": "Sunscreen on a beach day", "humanScore": 9 },
+        {
+          "id": "d",
+          "text": "A specific food from your childhood kitchen",
+          "humanScore": 10
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_004",
+      "category": "sensory_visceral",
+      "question": "There's a mosquito somewhere in your dark room. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hunt it with the lights on for 20 minutes minimum",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Pull the covers entirely over your head",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Give up, grab your phone, and accept your fate",
+          "humanScore": 8
+        },
+        {
+          "id": "d",
+          "text": "Fall asleep anyway — you're too tired to care",
+          "humanScore": 6
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_005",
+      "category": "sensory_visceral",
+      "question": "The shower suddenly goes ice cold. Your first move is:",
+      "options": [
+        {
+          "id": "a",
+          "text": "A sound comes out of you that cannot be described",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "You freeze completely and stop breathing",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "You leap out immediately without thinking",
+          "humanScore": 8
+        },
+        {
+          "id": "d",
+          "text": "You calmly adjust the temperature dial",
+          "humanScore": 3
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_006",
+      "category": "sensory_visceral",
+      "question": "You bite into food and hit a completely wrong texture. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Stop eating entirely — appetite gone forever",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Spit it out without hesitation or shame",
+          "humanScore": 8
+        },
+        {
+          "id": "c",
+          "text": "Cautiously investigate what it actually was",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Swallow it and try very hard to forget",
+          "humanScore": 7
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_007",
+      "category": "social_awkwardness",
+      "question": "Someone waves at you in public. You wave back. They meant someone behind you. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Slowly lower your hand and stare at the floor",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Pretend you were stretching your arm out",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Wave even more confidently to commit to the bit",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Make direct eye contact and nod like nothing happened",
+          "humanScore": 8
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_008",
+      "category": "social_awkwardness",
+      "question": "The waiter says 'enjoy your meal' and you say 'you too.' You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Think about it randomly for the next three days",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Whisper 'I meant thank you' to absolutely no one",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Laugh it off immediately and move on",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "It genuinely doesn't bother you at all",
+          "humanScore": 2
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_009",
+      "category": "social_awkwardness",
+      "question": "You say something in a group and nobody reacts. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Repeat it slightly louder to give it another shot",
+          "humanScore": 8
+        },
+        {
+          "id": "b",
+          "text": "Pretend you never said anything at all",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Laugh quietly at yourself and let it go",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Ask 'did nobody hear that?' out loud",
+          "humanScore": 7
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_010",
+      "category": "social_awkwardness",
+      "question": "You and a stranger keep dodging the same direction in a hallway. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Do an awkward little dance move to break the tension",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Stop completely and gesture dramatically for them to go",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Stare at your phone like you suddenly got an urgent text",
+          "humanScore": 8
+        },
+        {
+          "id": "d",
+          "text": "Barrel forward and let them figure it out",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_011",
+      "category": "social_awkwardness",
+      "question": "You accidentally called your teacher 'mom' once. How long did it live in your head?",
+      "options": [
+        {
+          "id": "a",
+          "text": "It still lives there. Right now. Always.",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "A few weeks of random cringe flashbacks",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "A couple of days, then I moved on",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "I genuinely forgot about it almost immediately",
+          "humanScore": 2
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_012",
+      "category": "social_awkwardness",
+      "question": "Someone is walking behind you and you're unsure whether to hold the door. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hold it from an uncomfortably far distance and regret it",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Speed-walk so the gap makes the decision easier",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Hold it normally like a relaxed functioning human",
+          "humanScore": 6
+        },
+        {
+          "id": "d",
+          "text": "Don't even think about it — just walk through",
+          "humanScore": 2
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_013",
+      "category": "emotional_decisions",
+      "question": "Your phone hits 3% battery and you have no charger. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Panic immediately and tell everyone nearby",
+          "humanScore": 9
+        },
+        {
+          "id": "b",
+          "text": "Enable low power mode and ration it like a survivalist",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Use it normally — whatever happens, happens",
+          "humanScore": 6
+        },
+        {
+          "id": "d",
+          "text": "Turn it off completely to 'save' it for later",
+          "humanScore": 8
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_014",
+      "category": "emotional_decisions",
+      "question": "The leftovers are probably bad. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Smell them anyway — you need to know",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Eat them anyway — you're hungry and optimistic",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Throw them without even opening the container",
+          "humanScore": 5
+        },
+        {
+          "id": "d",
+          "text": "Hand them to someone else to smell first",
+          "humanScore": 10
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_015",
+      "category": "emotional_decisions",
+      "question": "You're in bed and realize the lights are still on. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lay there negotiating with yourself for at least 5 minutes",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Get up immediately without hesitation",
+          "humanScore": 5
+        },
+        {
+          "id": "c",
+          "text": "Accept the light and sleep through it anyway",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "This scenario has literally never happened to you",
+          "humanScore": 1
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_016",
+      "category": "emotional_decisions",
+      "question": "You have something important tomorrow. Tonight you:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cannot sleep because your brain absolutely refuses",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Sleep fine but set six alarms just to be safe",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Stay up too late anyway and regret it tomorrow",
+          "humanScore": 10
+        },
+        {
+          "id": "d",
+          "text": "Sleep perfectly like a calm, functioning adult",
+          "humanScore": 2
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_017",
+      "category": "emotional_decisions",
+      "question": "You've read the same paragraph three times and absorbed nothing. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Read it a fourth time with intense, misplaced confidence",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Give up and stare at the wall for a while",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Skip it and hope it wasn't important",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Put it down entirely and do something else",
+          "humanScore": 8
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_018",
+      "category": "emotional_decisions",
+      "question": "A notification pops up while you're in the middle of something. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Check it immediately — it might be important",
+          "humanScore": 7
+        },
+        {
+          "id": "b",
+          "text": "Try to ignore it, fail about 30 seconds later",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Check it, get distracted, forget what you were doing",
+          "humanScore": 10
+        },
+        {
+          "id": "d",
+          "text": "Ignore it completely without any effort at all",
+          "humanScore": 3
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_019",
+      "category": "nostalgia_memory",
+      "question": "The most dangerous playground equipment from your childhood was:",
+      "options": [
+        {
+          "id": "a",
+          "text": "The metal slide that burned your legs in summer heat",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "The merry-go-round that spun genuinely too fast",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "The monkey bars hanging directly over concrete",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "The seesaw that left you stranded helplessly in the air",
+          "humanScore": 9
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_020",
+      "category": "nostalgia_memory",
+      "question": "When the teacher announced a movie day, you felt:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Instant, pure, unfiltered joy",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Suspicious — what's the actual catch here",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Relieved that you didn't have to think today",
+          "humanScore": 8
+        },
+        {
+          "id": "d",
+          "text": "Completely indifferent — movies weren't special",
+          "humanScore": 1
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_021",
+      "category": "nostalgia_memory",
+      "question": "Waiting for a slow computer to load felt like:",
+      "options": [
+        {
+          "id": "a",
+          "text": "A personal attack directed specifically at you",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "A chance to go do something else and come back",
+          "humanScore": 7
+        },
+        {
+          "id": "c",
+          "text": "Pure concentrated rage building slowly inside you",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Totally fine — patience has always been your thing",
+          "humanScore": 2
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_022",
+      "category": "nostalgia_memory",
+      "question": "On a long childhood car trip, you mostly:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Stared out the window and got deeply philosophical",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Asked 'are we there yet' more times than anyone admits",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Played license plate games or I-spy until it stopped being fun",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Slept the entire time without issue",
+          "humanScore": 6
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_023",
+      "category": "nostalgia_memory",
+      "question": "Hearing ice cream truck music in the distance as a kid meant:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Drop everything — this is a time-sensitive emergency",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Excitement immediately followed by realizing you had no money",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Pure summer captured in a single sound",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Background noise — it didn't mean much to you",
+          "humanScore": 1
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_024",
+      "category": "nostalgia_memory",
+      "question": "When the internet went out at home, you:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Grabbed your phone to Google why the internet was down",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Reset the router at least four times before accepting it",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Immediately blamed everyone else in the house",
+          "humanScore": 8
+        },
+        {
+          "id": "d",
+          "text": "Accepted it peacefully and found something else to do",
+          "humanScore": 3
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_025",
+      "category": "humor_absurdity",
+      "question": "It is 2am. You are not hungry. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Go to the kitchen anyway — just to look around",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Stare at the ceiling thinking specifically about food",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Eat something you will absolutely regret in the morning",
+          "humanScore": 10
+        },
+        {
+          "id": "d",
+          "text": "Sleep like a normal, well-adjusted human being",
+          "humanScore": 1
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_026",
+      "category": "humor_absurdity",
+      "question": "Your ideal superpower would honestly be:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Never needing sleep ever again",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Always finding a parking spot immediately",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Food never going bad in your fridge",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Flying through the sky like a superhero",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_027",
+      "category": "humor_absurdity",
+      "question": "You drop your phone face-down. Before picking it up you:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Brace yourself emotionally for the absolute worst",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Leave it there for a moment just to cope with the fear",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "Pick it up immediately — no point in waiting",
+          "humanScore": 5
+        },
+        {
+          "id": "d",
+          "text": "Close your eyes before flipping it over",
+          "humanScore": 9
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_028",
+      "category": "humor_absurdity",
+      "question": "Someone cancels plans you were secretly dreading. You feel:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pure, unfiltered, almost spiritual relief",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Relieved but you send a convincing 'nooo that's such a shame' text",
+          "humanScore": 10
+        },
+        {
+          "id": "c",
+          "text": "You'd already mentally cancelled in your head anyway",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Genuinely disappointed — you were actually looking forward to it",
+          "humanScore": 4
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_029",
+      "category": "humor_absurdity",
+      "question": "Your villain origin story would most likely involve:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Slow walkers blocking the entire pavement side by side",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Someone eating loudly right next to you",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "A printer failing at the single most critical moment",
+          "humanScore": 10
+        },
+        {
+          "id": "d",
+          "text": "People on speakerphone in completely public spaces",
+          "humanScore": 9
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_030",
+      "category": "humor_absurdity",
+      "question": "You hear your name mentioned in a conversation across the room. You:",
+      "options": [
+        {
+          "id": "a",
+          "text": "Immediately strain every sense to hear the rest of it",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Make intense accidental eye contact with whoever said it",
+          "humanScore": 8
+        },
+        {
+          "id": "c",
+          "text": "Pretend you heard absolutely nothing and act normal",
+          "humanScore": 9
+        },
+        {
+          "id": "d",
+          "text": "Your name? You heard nothing. You were focused.",
+          "humanScore": 1
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    }
+  ]
+}
