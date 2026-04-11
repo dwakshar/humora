@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Humora Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    #root {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      window.__HUMORA_CONFIG__ = {
+        sitekey: params.get('sitekey') || '',
+        theme: params.get('theme') || 'light',
+        widgetId: params.get('widgetId') || '',
+      };
+
+      function sendHeight() {
+        const height = document.getElementById('root')?.scrollHeight || document.body.scrollHeight;
+        window.parent.postMessage(
+          { source: 'humora', action: 'resize', height },
+          '*'
+        );
+      }
+
+      window.__HUMORA_SEND_RESULT__ = function (data) {
+        window.parent.postMessage(
+          {
+            source: 'humora',
+            widgetId: window.__HUMORA_CONFIG__.widgetId,
+            ...data,
+          },
+          '*'
+        );
+      };
+
+      window.addEventListener('message', function (event) {
+        if (event.data && event.data.source === 'humora-host') {
+          if (event.data.action === 'reset' && window.__HUMORA_RESET__) {
+            window.__HUMORA_RESET__();
+          }
+        }
+      });
+
+      const observer = new ResizeObserver(sendHeight);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const root = document.getElementById('root');
+        if (root) observer.observe(root);
+        sendHeight();
+      });
+
+      window.addEventListener('load', sendHeight);
+    }());
+  </script>
+
+  <script src="/humora.min.js"></script>
+</body>
+
+</html>
