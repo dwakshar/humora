@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import FailScreen from "./components/FailScreen";
 import PassScreen from "./components/PassScreen";
 import QuestionScreen from "./components/QuestionScreen";
@@ -10,14 +10,6 @@ import { selectQuestions } from "./engine/QuestionEngine";
 import { calculateScore } from "./engine/ScoringEngine";
 import { generateSessionId, generateToken } from "./utils/tokenGenerator";
 
-function initState() {
-  return {
-    questions: selectQuestions(),
-    sessionId: generateSessionId(),
-    tracker: new InteractionTracker(),
-  };
-}
-
 export default function Widget() {
   const [currentState, setCurrentState] = useState("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -25,7 +17,7 @@ export default function Widget() {
   const [answers, setAnswers] = useState([]);
   const [scoreResult, setScoreResult] = useState(null);
   const [sessionId, setSessionId] = useState(() => generateSessionId());
-  const trackerRef = useRef(new InteractionTracker());
+  const [tracker, setTracker] = useState(() => new InteractionTracker());
 
   function handleBegin() {
     setCurrentState("question");
@@ -43,7 +35,7 @@ export default function Widget() {
   }
 
   async function handleScoringComplete() {
-    const result = calculateScore(answers, trackerRef.current);
+    const result = calculateScore(answers, tracker);
     setScoreResult(result);
 
     let finalVerdict = result.verdict;
@@ -80,7 +72,7 @@ export default function Widget() {
   }
 
   function handleRetry() {
-    trackerRef.current = new InteractionTracker();
+    setTracker(new InteractionTracker());
     setQuestions(selectQuestions());
     setSessionId(generateSessionId());
     setAnswers([]);
@@ -123,7 +115,7 @@ export default function Widget() {
               questionIndex={currentQuestionIndex}
               totalQuestions={questions.length}
               onAnswer={handleAnswer}
-              tracker={trackerRef.current}
+              tracker={tracker}
             />
           )}
           {currentState === "scoring" && (

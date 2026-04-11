@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import OptionCard from "./OptionCard";
 import ProgressBar from "./ProgressBar";
@@ -13,8 +13,8 @@ export default function QuestionScreen({
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-    setSelectedOption(null);
     tracker.startQuestion(question.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question.id]);
 
   function handleOptionSelect(option) {
