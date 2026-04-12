@@ -5,7 +5,9 @@ export default function OptionCard({ text, isSelected, onSelect }) {
 
   const baseStyle = {
     backgroundColor: "#FFFFFF",
-    border: "1.5px solid #E5E7EB",
+    borderWidth: "1.5px",
+    borderStyle: "solid",
+    borderColor: "#E5E7EB",
     borderRadius: "14px",
     padding: "16px",
     minHeight: "72px",
