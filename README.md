@@ -1,38 +1,12 @@
 <div align="center">
 
-<br />
+<img src="banner.jpg" width=100% />
 
-```
-██╗  ██╗██╗   ██╗███╗   ███╗ ██████╗ ██████╗  █████╗
-██║  ██║██║   ██║████╗ ████║██╔═══██╗██╔══██╗██╔══██╗
-███████║██║   ██║██╔████╔██║██║   ██║██████╔╝███████║
-██╔══██║██║   ██║██║╚██╔╝██║██║   ██║██╔══██╗██╔══██║
-██║  ██║╚██████╔╝██║ ╚═╝ ██║╚██████╔╝██║  ██║██║  ██║
-╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-```
-
-### **Verify humanity. Not patience.**
-
-_A CAPTCHA replacement that asks human questions — not traffic light puzzles._
-
-<br />
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-4F46E5.svg?style=for-the-badge)](LICENSE)
-[![React](https://img.shields.io/badge/React-18-61DAFB.svg?style=for-the-badge&logo=react)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF.svg?style=for-the-badge&logo=vite)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4.svg?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
-[![Framer Motion](https://img.shields.io/badge/Framer-Motion-0055FF.svg?style=for-the-badge&logo=framer)](https://www.framer.com/motion)
-
-<br />
-
-> **"Wet socks or mosquito bite you can't scratch?"**
-> That's Humora. Verification that feels human — because only humans can answer it.
-
-<br />
-
-[**Live Demo**](soon) · [**Documentation**](#integration) · [**Report Bug**](issues) · [**Request Feature**](issues)
-
-<br />
+[![License: MIT](https://img.shields.io/badge/License-MIT-4F46E5?style=flat-square)](LICENSE)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Framer Motion](https://img.shields.io/badge/Framer-Motion-0055FF?style=flat-square&logo=framer&logoColor=white)](https://www.framer.com/motion)
 
 </div>
 
@@ -649,7 +623,7 @@ _If you found this useful, give it a ⭐ — it helps others find the project._
 
 <br />
 
-[**Live Demo**](https://humora.vercel.app) · [**Report Bug**](issues) · [**Twitter**](https://twitter.com/yourhandle)
+[**Live Demo**](soon) · [**Report Bug**](issues) · [**Twitter**](https://twitter.com/dwakshar)
 
 <br />
 
