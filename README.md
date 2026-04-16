@@ -33,7 +33,7 @@ Five questions. Thirty seconds. Zero frustration. Genuine human signal.
 <img src="preview.png" width=100% />
 
 ---
-
+s
 ## How It Works
 
 Humora doesn't verify humanity through correct answers — it verifies through **human behavioral patterns**:
