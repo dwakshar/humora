@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { jwtVerify } from 'jose';
-import { registeredSites } from './register.js';
+import { findSiteByKey } from '../lib/siteStore.js';
+import { hasUsedToken, markTokenUsed } from '../lib/tokenStore.js';
 
 const router = Router();
-const usedTokens = new Set();
 const SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'humora-secret-key-mvp'
+  process.env.JWT_SECRET || 'humora-production-secret-change-this'
 );
 
 router.post('/', async (req, res, next) => {
@@ -16,12 +16,9 @@ router.post('/', async (req, res, next) => {
       return res.status(400).json({ success: false, error: 'invalid-token' });
     }
 
-    if (!sitekey || !registeredSites.has(sitekey)) {
+    const site = await findSiteByKey(sitekey);
+    if (!sitekey || !site) {
       return res.status(400).json({ success: false, error: 'invalid-sitekey' });
-    }
-
-    if (usedTokens.has(token)) {
-      return res.status(400).json({ success: false, error: 'duplicate-token' });
     }
 
     let payload;
@@ -42,18 +39,27 @@ router.post('/', async (req, res, next) => {
       return res.status(400).json({ success: false, error: 'expired-token' });
     }
 
+    if (payload.sitekey !== site.sitekey || !payload.jti) {
+      return res.status(400).json({ success: false, error: 'invalid-token' });
+    }
+
+    if (await hasUsedToken(payload.jti)) {
+      return res.status(400).json({ success: false, error: 'duplicate-token' });
+    }
+
     const issuedAt = payload.iat || 0;
-    if (now - issuedAt > 300) {
+    if (now - issuedAt > 300 || payload.verified !== true) {
       return res.status(400).json({ success: false, error: 'expired-token' });
     }
 
-    usedTokens.add(token);
+    await markTokenUsed(payload.jti, (payload.exp || now) * 1000);
 
     return res.json({
       success: true,
       score: payload.score,
       verdict: payload.verdict,
       timestamp: payload.timestamp,
+      sessionId: payload.sessionId,
     });
   } catch (err) {
     next(err);

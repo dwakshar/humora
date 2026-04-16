@@ -238,6 +238,69 @@ This outputs `dist/humora.min.js` — a single embeddable JS file, ready for any
 
 ---
 
+## Deployment
+
+Deploy Humora as two separate projects:
+
+1. The root project as the public widget host
+2. `humora-server/` as the verification API
+
+### Deploy the widget host
+
+Deploy the root project to Vercel or Netlify.
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Public asset URL: `https://your-widget-domain.com/humora.min.js`
+- Public iframe URL: `https://your-widget-domain.com/widget`
+
+The widget loader resolves `widget.html` from the same base URL as the hosted `humora.min.js` file, so it can be embedded safely on third-party websites.
+
+### Deploy the API
+
+Deploy `humora-server/` as its own service.
+
+Render or Railway:
+
+- Root directory: `humora-server`
+- Build command: `npm install`
+- Start command: `npm start`
+
+Vercel:
+
+- Import `humora-server/` as a separate project
+- The included `vercel.json` rewrites `/api/*` to the Express app entry
+
+Set these environment variables in the API deployment:
+
+```bash
+JWT_SECRET=replace-with-a-long-random-secret
+HUMORA_ALLOWED_ORIGINS=https://your-widget-domain.com
+NODE_ENV=production
+PORT=3001
+```
+
+### Register a site
+
+After the API is live, request a site key:
+
+```bash
+curl -X POST https://your-api-domain.com/api/register ^
+  -H "Content-Type: application/json" ^
+  -d "{\"domain\":\"yourwebsite.com\",\"email\":\"you@example.com\"}"
+```
+
+Use the returned `sitekey` in the widget embed on your website.
+
+### Persistence
+
+Site registrations and used token IDs are stored in JSON files under `humora-server/data/`.
+
+- This works well on a single Node host with persistent disk.
+- For multi-instance or fully serverless deployments, move this storage to a database before scaling.
+
+---
+
 ## Integration
 
 Humora integrates exactly like Google reCAPTCHA. If you've used reCAPTCHA before, you already know how to use Humora.
@@ -245,7 +308,7 @@ Humora integrates exactly like Google reCAPTCHA. If you've used reCAPTCHA before
 ### Step 1 — Add the Script Tag
 
 ```html
-<script src="https://widget.humora.io/humora.min.js" async defer></script>
+<script src="https://your-widget-domain.com/humora.min.js" async defer></script>
 ```
 
 ### Step 2 — Add the Widget to Your Form
@@ -256,7 +319,11 @@ Humora integrates exactly like Google reCAPTCHA. If you've used reCAPTCHA before
   <input type="password" placeholder="Password" name="password" />
 
   <!-- Drop this anywhere in your form -->
-  <div class="humora-widget" data-sitekey="YOUR_SITE_KEY"></div>
+  <div
+    class="humora-widget"
+    data-sitekey="YOUR_SITE_KEY"
+    data-api-url="https://your-api-domain.com"
+  ></div>
 
   <button type="submit">Create Account</button>
 </form>
@@ -268,6 +335,7 @@ Humora integrates exactly like Google reCAPTCHA. If you've used reCAPTCHA before
 humora.ready(function () {
   humora.render("humora-container", {
     sitekey: "YOUR_SITE_KEY",
+    apiBaseUrl: "https://your-api-domain.com",
 
     // Called when user passes — token is your verification proof
     callback: function (token) {
@@ -290,8 +358,8 @@ humora.ready(function () {
 app.post("/signup", async (req, res) => {
   const { humanToken, email, password } = req.body;
 
-  // Verify the token with Humora API
-  const result = await fetch("https://api.humora.io/api/verify", {
+  // Verify the token with your deployed Humora API
+  const result = await fetch("https://your-api-domain.com/api/verify", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -309,6 +377,14 @@ app.post("/signup", async (req, res) => {
   res.json({ success: true });
 });
 ```
+
+### Verification flow
+
+1. The public website loads `humora.min.js` from your widget host.
+2. The script loads `widget.html` in an iframe from that same widget host.
+3. The iframe sends answers and interaction data to `POST /api/assess`.
+4. The API validates the sitekey and parent domain, computes the score server-side, and issues a short-lived JWT.
+5. Your app backend sends that JWT to `POST /api/verify` before accepting the form submission.
 
 ### postMessage API
 

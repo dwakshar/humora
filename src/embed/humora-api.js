@@ -1,9 +1,37 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import Widget from '../Widget.jsx';
+import '../index.css';
+
 (function (window) {
   const widgets = new Map();
   const tokens = new Map();
   const readyCallbacks = [];
   let widgetCounter = 0;
   let isReady = false;
+  const assetBaseUrl = resolveAssetBaseUrl();
+
+  function resolveAssetBaseUrl() {
+    const override = window.HUMORA_WIDGET_ORIGIN || window.__HUMORA_WIDGET_ORIGIN__;
+    if (override) {
+      return new URL(override.endsWith('/') ? override : override + '/');
+    }
+
+    const currentScript = document.currentScript;
+    if (currentScript && currentScript.src) {
+      return new URL('./', currentScript.src);
+    }
+
+    const script = Array.from(document.getElementsByTagName('script')).find((tag) => (
+      typeof tag.src === 'string' && tag.src.includes('humora.min.js')
+    ));
+
+    if (script && script.src) {
+      return new URL('./', script.src);
+    }
+
+    return new URL(window.location.origin + '/');
+  }
 
   function generateWidgetId() {
     return 'humora-widget-' + ++widgetCounter;
@@ -22,9 +50,20 @@
     const widgetId = generateWidgetId();
     const sitekey = config?.sitekey || '';
     const theme = config?.theme || 'light';
+    const apiBaseUrl = config?.apiBaseUrl || window.HUMORA_API_URL || '';
+    const parentOrigin = window.location.origin;
 
     const iframe = document.createElement('iframe');
-    iframe.src = 'https://humora.app/widget?sitekey=' + encodeURIComponent(sitekey) + '&theme=' + encodeURIComponent(theme) + '&widgetId=' + encodeURIComponent(widgetId);
+    // Load the iframe shell from the same base URL as the hosted widget script.
+    const widgetUrl = new URL('widget.html', assetBaseUrl);
+    widgetUrl.searchParams.set('sitekey', sitekey);
+    widgetUrl.searchParams.set('theme', theme);
+    widgetUrl.searchParams.set('widgetId', widgetId);
+    if (apiBaseUrl) {
+      widgetUrl.searchParams.set('apiBaseUrl', apiBaseUrl);
+    }
+    widgetUrl.searchParams.set('parentOrigin', parentOrigin);
+    iframe.src = widgetUrl.toString();
     iframe.style.border = 'none';
     iframe.style.width = '100%';
     iframe.style.minHeight = '520px';
@@ -150,10 +189,12 @@
       const theme = el.getAttribute('data-theme') || 'light';
       const callbackName = el.getAttribute('data-callback');
       const expiredCallbackName = el.getAttribute('data-expired-callback');
+      const apiBaseUrl = el.getAttribute('data-api-url') || window.HUMORA_API_URL || '';
 
       const config = {
         sitekey,
         theme,
+        apiBaseUrl,
         callback: callbackName && typeof window[callbackName] === 'function'
           ? window[callbackName]
           : null,
@@ -179,9 +220,28 @@
     document.addEventListener('DOMContentLoaded', function () {
       autoRender();
       fireReady();
+      mountWidgetApp();
     });
   } else {
     autoRender();
     fireReady();
+    mountWidgetApp();
+  }
+
+  function mountWidgetApp() {
+    const rootElement = document.getElementById('root');
+    if (!rootElement || !window.__HUMORA_CONFIG__) return;
+
+    if (!rootElement.__humoraRoot) {
+      rootElement.__humoraRoot = ReactDOM.createRoot(rootElement);
+    }
+
+    rootElement.__humoraRoot.render(
+      React.createElement(
+        React.StrictMode,
+        null,
+        React.createElement(Widget)
+      )
+    );
   }
 }(window));

@@ -1,34 +1,40 @@
-import { randomBytes } from 'crypto';
 import { Router } from 'express';
+import { isAllowedRegistrationDomain, normalizeDomain } from '../lib/domain.js';
+import { registerSite } from '../lib/siteStore.js';
 
 const router = Router();
-export const registeredSites = new Map();
 
-function generateSitekey() {
-  return 'sk_live_' + randomBytes(16).toString('hex');
-}
-
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const { domain, email } = req.body;
+    const normalizedDomain = normalizeDomain(domain);
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
-    if (!domain || !email) {
+    if (!normalizedDomain || !normalizedEmail) {
       return res.status(400).json({
         success: false,
         error: 'domain and email are required',
       });
     }
 
-    for (const [sitekey, site] of registeredSites.entries()) {
-      if (site.domain === domain) {
-        return res.json({ sitekey, domain });
-      }
+    if (!isAllowedRegistrationDomain(normalizedDomain)) {
+      return res.status(400).json({
+        success: false,
+        error: 'invalid-domain',
+      });
     }
 
-    const sitekey = generateSitekey();
-    registeredSites.set(sitekey, { domain, email, createdAt: Date.now() });
+    const site = await registerSite({
+      domain: normalizedDomain,
+      email: normalizedEmail,
+    });
 
-    return res.status(201).json({ sitekey, domain });
+    return res.status(201).json({
+      success: true,
+      sitekey: site.sitekey,
+      domain: site.domain,
+      createdAt: site.createdAt,
+    });
   } catch (err) {
     next(err);
   }

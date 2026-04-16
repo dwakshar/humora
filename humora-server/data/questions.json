@@ -1,0 +1,688 @@
+{
+  "questions": [
+    {
+      "id": "q_001",
+      "category": "sensory_visceral",
+      "question": "You bite into a sandwich and realize it's mostly bread. What do you do next?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Rearrange the fillings for maximum flavor in the next bite",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Eat around the bread to find the good stuff",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Accept your fate and finish the bread-heavy bite",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Make a mental note to never order this again",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_002",
+      "category": "sensory_visceral",
+      "question": "You step into a puddle with socks on. What's your first reaction?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Invent a new walk to avoid squishing",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Immediately remove the socks, wherever you are",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Pretend it didn't happen and keep going",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Complain loudly to anyone nearby",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_003",
+      "category": "sensory_visceral",
+      "question": "You smell something burning but can't find the source. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sniff around like a bloodhound",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Ask everyone if they smell it too",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Open a window and hope for the best",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Assume it's someone else's problem",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_004",
+      "category": "sensory_visceral",
+      "question": "You get an itch in the middle of your back. How do you handle it?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Contort like a pretzel to reach it",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Find the nearest wall to rub against",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Ask a friend for help, awkwardly",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Ignore it and hope it goes away",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_005",
+      "category": "sensory_visceral",
+      "question": "You take a sip of a drink and it's not what you expected. What's your move?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Make a dramatic face and announce it",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Double-check the cup like it's betrayed you",
+          "humanScore": 9
+        },
+        { "id": "c", "text": "Swallow and pretend it's fine", "humanScore": 7 },
+        {
+          "id": "d",
+          "text": "Quietly swap drinks with someone else",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_006",
+      "category": "sensory_visceral",
+      "question": "You hear a weird noise at night. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Freeze and listen like a cartoon character",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Narrate your fear out loud to the darkness",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Check every room with a random object as a weapon",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Assume it's the house settling and go back to sleep",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+
+    {
+      "id": "q_007",
+      "category": "social_awkwardness",
+      "question": "You wave at someone who wasn't waving at you. What now?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Turn it into a stretch and pretend you meant it",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Wave at someone else to cover it up",
+          "humanScore": 9
+        },
+        { "id": "c", "text": "Laugh at yourself and move on", "humanScore": 7 },
+        {
+          "id": "d",
+          "text": "Pretend you were fixing your hair",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_008",
+      "category": "social_awkwardness",
+      "question": "You forget someone's name mid-conversation. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Invent a creative nickname on the spot",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Ask them to spell their name for a fake reason",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Avoid using their name entirely",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Hope someone else says it soon", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_009",
+      "category": "social_awkwardness",
+      "question": "You say goodbye, then walk in the same direction. What's your move?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Make a joke about it and keep walking",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Pretend to get a phone call and stop",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Walk faster to escape the situation",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Stare at your shoes until it's over",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_010",
+      "category": "social_awkwardness",
+      "question": "You laugh at a story you didn't hear. What do you do next?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ask for a dramatic reenactment",
+          "humanScore": 10
+        },
+        { "id": "b", "text": "Laugh even harder to sell it", "humanScore": 9 },
+        {
+          "id": "c",
+          "text": "Nod and hope for context clues",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Quietly fade into the background",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_011",
+      "category": "social_awkwardness",
+      "question": "You accidentally reply-all to a company email. What now?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Send a meme as damage control",
+          "humanScore": 10
+        },
+        { "id": "b", "text": "Own it with a follow-up joke", "humanScore": 9 },
+        {
+          "id": "c",
+          "text": "Blame autocorrect in a second email",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Pretend it never happened", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_012",
+      "category": "social_awkwardness",
+      "question": "You walk into a glass door. What's your recovery plan?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bow and take a theatrical exit",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Check if anyone saw, then laugh",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Blame the door for being too clean",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Quickly walk away and never return",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+
+    {
+      "id": "q_013",
+      "category": "emotional_decisions",
+      "question": "You find $5 on the ground. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Buy a snack and share it with a friend",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Leave it for someone who needs it more",
+          "humanScore": 9
+        },
+        { "id": "c", "text": "Pocket it and move on", "humanScore": 7 },
+        {
+          "id": "d",
+          "text": "Try to find the owner, but give up quickly",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_014",
+      "category": "emotional_decisions",
+      "question": "You see a sad dog in the rain. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sing it a song about sunshine",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Try to cheer it up with silly faces",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Offer your umbrella, even if it doesn't help",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Take a photo and post about it", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_015",
+      "category": "emotional_decisions",
+      "question": "You get a text that just says 'K.' How do you feel?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Overthink it for the next hour",
+          "humanScore": 10
+        },
+        { "id": "b", "text": "Send a meme in response", "humanScore": 9 },
+        {
+          "id": "c",
+          "text": "Assume they're mad and apologize",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Ignore it and move on", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_016",
+      "category": "emotional_decisions",
+      "question": "You accidentally break something sentimental. What do you do?",
+      "options": [
+        { "id": "a", "text": "Hold a tiny funeral for it", "humanScore": 10 },
+        {
+          "id": "b",
+          "text": "Try to glue it back together, badly",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Hide the evidence and hope no one notices",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Blame gravity", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_017",
+      "category": "emotional_decisions",
+      "question": "You see someone crying in public. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Offer them a snack from your bag",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Sit nearby in silent solidarity",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Pretend to tie your shoe until they leave",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Send them good vibes from afar", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_018",
+      "category": "emotional_decisions",
+      "question": "You get invited to a party but don't know anyone. What's your plan?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Find the pet and hang out with it all night",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Make up a fun alter ego for the evening",
+          "humanScore": 9
+        },
+        { "id": "c", "text": "Stick to the snack table", "humanScore": 7 },
+        { "id": "d", "text": "Leave early and blame traffic", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+
+    {
+      "id": "q_019",
+      "category": "nostalgia_memory",
+      "question": "You hear your old favorite song in public. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sing along, choreography included",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Text a friend who also loved it",
+          "humanScore": 9
+        },
+        { "id": "c", "text": "Smile and hum quietly", "humanScore": 7 },
+        { "id": "d", "text": "Shazam it just to be sure", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_020",
+      "category": "nostalgia_memory",
+      "question": "You find an old toy from childhood. What happens next?",
+      "options": [
+        { "id": "a", "text": "Give it a dramatic backstory", "humanScore": 10 },
+        { "id": "b", "text": "Take a selfie with it", "humanScore": 9 },
+        { "id": "c", "text": "Try to make it work again", "humanScore": 7 },
+        { "id": "d", "text": "Put it back and walk away", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_021",
+      "category": "nostalgia_memory",
+      "question": "You see a commercial from your childhood. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Recite the jingle word-for-word",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Feel a wave of nostalgia and text someone",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Look up the product to see if it still exists",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Ignore it and keep scrolling", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_022",
+      "category": "nostalgia_memory",
+      "question": "You find a note you wrote to yourself years ago. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Write a reply and hide it for future you",
+          "humanScore": 10
+        },
+        { "id": "b", "text": "Laugh at your old handwriting", "humanScore": 9 },
+        {
+          "id": "c",
+          "text": "Try to remember what you were thinking",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Throw it away without reading", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_023",
+      "category": "nostalgia_memory",
+      "question": "You see a playground you used to visit. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Test the swings, age be damned",
+          "humanScore": 10
+        },
+        { "id": "b", "text": "Take a photo for the memories", "humanScore": 9 },
+        { "id": "c", "text": "Tell someone a story about it", "humanScore": 7 },
+        {
+          "id": "d",
+          "text": "Walk by and pretend not to care",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_024",
+      "category": "nostalgia_memory",
+      "question": "You find a box of old photos. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Narrate each photo like a documentary",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Send the funniest one to a friend",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Try to recreate one of the photos",
+          "humanScore": 7
+        },
+        {
+          "id": "d",
+          "text": "Put the box back and forget about it",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+
+    {
+      "id": "q_025",
+      "category": "humor_absurdity",
+      "question": "You see a squirrel eating pizza. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Narrate its life as a pizza chef",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Take a video and add dramatic music",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Try to make eye contact and nod respectfully",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Keep walking like it's normal", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_026",
+      "category": "humor_absurdity",
+      "question": "You wake up with spaghetti in your hair. What do you do?",
+      "options": [
+        { "id": "a", "text": "Invent a new breakfast trend", "humanScore": 10 },
+        {
+          "id": "b",
+          "text": "Blame your dreams in a social post",
+          "humanScore": 9
+        },
+        {
+          "id": "c",
+          "text": "Try to remember last night's dinner",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Just wash it out and move on", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_027",
+      "category": "humor_absurdity",
+      "question": "You see someone walking a pet lizard in a sweater. What do you do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Compliment the lizard's fashion sense",
+          "humanScore": 10
+        },
+        {
+          "id": "b",
+          "text": "Ask if the lizard picked the outfit",
+          "humanScore": 9
+        },
+        { "id": "c", "text": "Take a selfie with the lizard", "humanScore": 7 },
+        { "id": "d", "text": "Pretend it's totally normal", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_028",
+      "category": "humor_absurdity",
+      "question": "You sneeze and accidentally meow instead. What now?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Act like nothing happened and keep meowing",
+          "humanScore": 10
+        },
+        { "id": "b", "text": "Blame it on a nearby cat", "humanScore": 9 },
+        {
+          "id": "c",
+          "text": "Apologize to everyone in the room",
+          "humanScore": 7
+        },
+        { "id": "d", "text": "Leave the room in silence", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_029",
+      "category": "humor_absurdity",
+      "question": "You get a text from a number labeled 'Your Future Self.' What do you do?",
+      "options": [
+        { "id": "a", "text": "Reply with a dad joke", "humanScore": 10 },
+        { "id": "b", "text": "Ask for lottery numbers", "humanScore": 9 },
+        { "id": "c", "text": "Send a meme as a test", "humanScore": 7 },
+        { "id": "d", "text": "Block the number immediately", "humanScore": 5 }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    },
+    {
+      "id": "q_030",
+      "category": "humor_absurdity",
+      "question": "You find a potato shaped exactly like a heart. What do you do?",
+      "options": [
+        { "id": "a", "text": "Declare it your soulmate", "humanScore": 10 },
+        { "id": "b", "text": "Give it a name and backstory", "humanScore": 9 },
+        { "id": "c", "text": "Take a photo and share it", "humanScore": 7 },
+        {
+          "id": "d",
+          "text": "Eat it without a second thought",
+          "humanScore": 5
+        }
+      ],
+      "expectedTimingMs": { "min": 800, "max": 6000 }
+    }
+  ]
+}

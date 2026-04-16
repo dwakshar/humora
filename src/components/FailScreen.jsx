@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-export default function FailScreen({ onRetry }) {
+export default function FailScreen({ onRetry, errorMessage = "" }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -63,7 +63,7 @@ export default function FailScreen({ onRetry }) {
           marginBottom: 0,
           textAlign: "center",
         }}>
-        You might be a bot. Or just having a weird day.
+        {errorMessage || "You might be a bot. Or just having a weird day."}
       </p>
 
       <button

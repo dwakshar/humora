@@ -27,7 +27,7 @@ export default function QuestionScreen({
   const handleOptionSelect = useCallback(
     (option) => {
       setSelectedOption(option.id);
-      trackerRef.current?.recordOptionHover?.(option.id);
+      trackerRef.current?.recordOptionHover?.(question.id, option.id);
       trackerRef.current?.recordAnswer?.(question.id, option.id);
     },
     [question.id]
@@ -84,6 +84,7 @@ export default function QuestionScreen({
                 text={option.text}
                 isSelected={selectedOption === option.id}
                 onSelect={() => handleOptionSelect(option)}
+                onHover={() => trackerRef.current?.recordOptionHover?.(question.id, option.id)}
               />
             ))}
           </div>

@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
+  <link rel="stylesheet" href="/humora.css" />
   <style>
     *,
     *::before,
@@ -41,13 +42,18 @@
         sitekey: params.get('sitekey') || '',
         theme: params.get('theme') || 'light',
         widgetId: params.get('widgetId') || '',
+        apiBaseUrl: params.get('apiBaseUrl') || '',
+        parentOrigin: params.get('parentOrigin') || document.referrer || '',
       };
+      const targetOrigin = /^https?:\/\//.test(window.__HUMORA_CONFIG__.parentOrigin)
+        ? window.__HUMORA_CONFIG__.parentOrigin
+        : '*';
 
       function sendHeight() {
         const height = document.getElementById('root')?.scrollHeight || document.body.scrollHeight;
         window.parent.postMessage(
           { source: 'humora', action: 'resize', height },
-          '*'
+          targetOrigin
         );
       }
 
@@ -58,7 +64,7 @@
             widgetId: window.__HUMORA_CONFIG__.widgetId,
             ...data,
           },
-          '*'
+          targetOrigin
         );
       };
 

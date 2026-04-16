@@ -1,3 +1,5 @@
+import { calculateVerificationScore } from '../../shared/verification.js';
+
 const PASS_LINES = [
   "Chaotically empathetic. Definitely not a bot.",
   "Gloriously irrational. Verified human.",
@@ -28,19 +30,16 @@ export function getTimingBonus(tracker, questionIds) {
 }
 
 export function calculateScore(answers, tracker) {
-  const answerScore = answers.reduce((sum, a) => sum + (a.humanScore ?? 0), 0);
-  const questionIds = answers.map((a) => a.questionId);
-  const timingBonus = getTimingBonus(tracker, questionIds);
-  const behaviorBonus = tracker.getBehaviorScore();
-  const totalScore = answerScore + timingBonus + behaviorBonus;
+  const questionIds = answers.map((answer) => answer.questionId);
+  const score = calculateVerificationScore(answers, tracker.getSummary(questionIds));
 
   let verdict;
   let personalityLine;
 
-  if (totalScore >= 50) {
+  if (score.totalScore >= 50) {
     verdict = "pass";
     personalityLine = pickRandom(PASS_LINES);
-  } else if (totalScore >= 35) {
+  } else if (score.totalScore >= 35) {
     verdict = "borderline";
     personalityLine = pickRandom(BORDERLINE_LINES);
   } else {
@@ -49,10 +48,10 @@ export function calculateScore(answers, tracker) {
   }
 
   return {
-    answerScore,
-    timingBonus,
-    behaviorBonus,
-    totalScore,
+    answerScore: score.answerScore,
+    timingBonus: score.timingBonus,
+    behaviorBonus: score.behaviorBonus,
+    totalScore: score.totalScore,
     verdict,
     personalityLine,
   };

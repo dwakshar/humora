@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Humora Demo Client</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f4ef;
+      --panel: #fffdf8;
+      --ink: #171717;
+      --muted: #6b7280;
+      --line: #ded7ca;
+      --accent: #1f6feb;
+      --accent-strong: #1557b0;
+      --success: #0f9d58;
+      --danger: #c0392b;
+      --radius: 18px;
+      --shadow: 0 18px 50px rgba(23, 23, 23, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(31, 111, 235, 0.08), transparent 35%),
+        linear-gradient(180deg, #f8f6f0 0%, var(--bg) 100%);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 72px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: rgba(255, 253, 248, 0.95);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 32px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(31, 111, 235, 0.08);
+      color: var(--accent-strong);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 14px;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 0.95;
+      font-weight: 700;
+    }
+
+    .hero-copy p,
+    .panel p,
+    .log,
+    label,
+    input,
+    button {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .panel p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 14px;
+      background: white;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 160ms ease, background-color 160ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .stage {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .widget-shell {
+      padding: 24px;
+    }
+
+    .widget-shell h2,
+    .sidebar h2 {
+      margin: 0 0 16px;
+      font-size: 26px;
+    }
+
+    .widget-host {
+      min-height: 560px;
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.65));
+      padding: 20px;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .status strong {
+      color: var(--ink);
+    }
+
+    .sidebar {
+      padding: 24px;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 8px 12px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 12px;
+      margin-bottom: 18px;
+    }
+
+    .kv div:nth-child(odd) {
+      color: var(--muted);
+    }
+
+    .log {
+      min-height: 220px;
+      max-height: 360px;
+      overflow: auto;
+      background: #121212;
+      color: #e5e7eb;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .hint {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .ok {
+      color: var(--success);
+    }
+
+    .bad {
+      color: var(--danger);
+    }
+
+    @media (max-width: 900px) {
+
+      .hero,
+      .stage,
+      .fields {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="card hero-copy">
+        <span class="eyebrow">Interview Demo</span>
+        <h1>Client-side view of a Humora integration.</h1>
+        <p>
+          This page behaves like a third-party website embedding Humora. It registers a site,
+          mounts the widget, captures the returned verification token, and verifies it against the API.
+        </p>
+      </div>
+
+      <aside class="card panel">
+        <h2>Demo Setup</h2>
+        <p>Use the defaults for local development or point this page at your deployed widget and API hosts.</p>
+
+        <div class="grid fields">
+          <div>
+            <label for="widgetOrigin">Widget Host</label>
+            <input id="widgetOrigin" />
+          </div>
+          <div>
+            <label for="apiOrigin">API Host</label>
+            <input id="apiOrigin" />
+          </div>
+          <div>
+            <label for="domain">Site Domain</label>
+            <input id="domain" value="localhost" />
+          </div>
+          <div>
+            <label for="email">Owner Email</label>
+            <input id="email" value="demo@example.com" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="registerBtn">1. Register Site + Load Widget</button>
+          <button class="secondary" id="verifyBtn">2. Verify Latest Token</button>
+          <button class="secondary" id="resetBtn">Reset Widget</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="stage">
+      <div class="card widget-shell">
+        <h2>Embedded Client Form</h2>
+        <div id="widgetContainer" class="widget-host"></div>
+        <div class="status" id="statusBox">
+          <strong>Status:</strong> waiting to register a local demo site
+        </div>
+      </div>
+
+      <aside class="card sidebar">
+        <h2>Proof Panel</h2>
+        <div class="kv">
+          <div>sitekey</div>
+          <div id="sitekeyValue">not created</div>
+          <div>token</div>
+          <div id="tokenValue">none</div>
+          <div>verdict</div>
+          <div id="verdictValue">pending</div>
+          <div>score</div>
+          <div id="scoreValue">-</div>
+        </div>
+        <div class="log" id="logBox">Ready.\n</div>
+        <p class="hint">
+          Presenter flow: click register, complete the widget like a client would, then click verify to show the backend
+          accepts the token.
+        </p>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+    const DEFAULT_HOSTNAME = window.location.hostname || 'localhost';
+
+    const state = {
+      sitekey: '',
+      token: '',
+      widgetId: null,
+      resolvedApiOrigin: '',
+      humoraLoaded: false,
+    };
+
+    const els = {
+      widgetOrigin: document.getElementById('widgetOrigin'),
+      apiOrigin: document.getElementById('apiOrigin'),
+      domain: document.getElementById('domain'),
+      email: document.getElementById('email'),
+      registerBtn: document.getElementById('registerBtn'),
+      verifyBtn: document.getElementById('verifyBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      widgetContainer: document.getElementById('widgetContainer'),
+      statusBox: document.getElementById('statusBox'),
+      logBox: document.getElementById('logBox'),
+      sitekeyValue: document.getElementById('sitekeyValue'),
+      tokenValue: document.getElementById('tokenValue'),
+      verdictValue: document.getElementById('verdictValue'),
+      scoreValue: document.getElementById('scoreValue'),
+    };
+
+    function log(message, kind = '') {
+      const prefix = new Date().toLocaleTimeString();
+      els.logBox.textContent += `[${prefix}] ${message}\n`;
+      els.logBox.scrollTop = els.logBox.scrollHeight;
+      if (kind === 'ok') {
+        els.logBox.classList.remove('bad');
+      }
+    }
+
+    function setStatus(message, ok) {
+      els.statusBox.innerHTML = `<strong>Status:</strong> <span class="${ok ? 'ok' : 'bad'}">${message}</span>`;
+    }
+
+    function trimOrigin(value) {
+      return String(value || '').trim().replace(/\/$/, '');
+    }
+
+    function guessWidgetOrigin() {
+      const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+      const host = DEFAULT_HOSTNAME;
+      if (window.location.port === '4173') {
+        return `${protocol}//${window.location.host}`;
+      }
+      return `${protocol}//${host}:4173`;
+    }
+
+    function guessApiOrigin() {
+      const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+      const host = DEFAULT_HOSTNAME;
+      if (window.location.port === '3001') {
+        return `${protocol}//${window.location.host}`;
+      }
+      return `${protocol}//${host}:3001`;
+    }
+
+    function getApiOriginCandidates() {
+      const typed = trimOrigin(els.apiOrigin.value);
+      const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+      const candidates = [
+        typed,
+        `${protocol}//${DEFAULT_HOSTNAME}:3001`,
+        `${protocol}//localhost:3001`,
+        `${protocol}//127.0.0.1:3001`,
+      ].filter(Boolean);
+
+      return [...new Set(candidates)];
+    }
+
+    function getWidgetOriginCandidates() {
+      const typed = trimOrigin(els.widgetOrigin.value);
+      const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+      const candidates = [
+        typed,
+        `${protocol}//${DEFAULT_HOSTNAME}:4173`,
+        `${protocol}//localhost:4173`,
+        `${protocol}//127.0.0.1:4173`,
+      ].filter(Boolean);
+
+      return [...new Set(candidates)];
+    }
+
+    async function requestJson(path, options = {}) {
+      const attemptedOrigins = [];
+      let lastError = null;
+
+      for (const apiOrigin of getApiOriginCandidates()) {
+        attemptedOrigins.push(apiOrigin);
+        try {
+          const response = await fetch(`${apiOrigin}${path}`, options);
+          const data = await response.json();
+          state.resolvedApiOrigin = apiOrigin;
+          els.apiOrigin.value = apiOrigin;
+          return { response, data, apiOrigin };
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      const detail = attemptedOrigins.length > 0
+        ? `Could not reach API. Tried: ${attemptedOrigins.join(', ')}`
+        : 'Could not reach API.';
+      const error = new Error(detail);
+      error.cause = lastError;
+      throw error;
+    }
+
+    function loadHumoraScript() {
+      if (state.humoraLoaded && window.humora) {
+        return Promise.resolve();
+      }
+
+      const candidates = getWidgetOriginCandidates();
+      if (candidates.length === 0) {
+        return Promise.reject(new Error('Widget host is required.'));
+      }
+
+      return new Promise((resolve, reject) => {
+        let index = 0;
+
+        const tryNext = () => {
+          if (index >= candidates.length) {
+            reject(new Error(`Could not load widget script. Tried: ${candidates.join(', ')}`));
+            return;
+          }
+
+          const widgetOrigin = candidates[index++];
+          const existing = document.getElementById('humora-loader-script');
+          if (existing) {
+            existing.remove();
+          }
+
+          const script = document.createElement('script');
+          script.id = 'humora-loader-script';
+          script.src = `${widgetOrigin}/humora.min.js`;
+          script.async = true;
+          script.onload = () => {
+            state.humoraLoaded = true;
+            els.widgetOrigin.value = widgetOrigin;
+            log(`Loaded widget script from ${script.src}`, 'ok');
+            resolve();
+          };
+          script.onerror = () => {
+            script.remove();
+            tryNext();
+          };
+          document.body.appendChild(script);
+        };
+
+        tryNext();
+      });
+    }
+
+    function renderWidget() {
+      if (!window.humora) {
+        throw new Error('humora loader not found. Check the Widget Host and make sure that host serves humora.min.js.');
+      }
+
+      els.widgetContainer.innerHTML = '';
+      state.widgetId = window.humora.render(els.widgetContainer, {
+        sitekey: state.sitekey,
+        apiBaseUrl: state.resolvedApiOrigin || trimOrigin(els.apiOrigin.value),
+        callback(token) {
+          state.token = token;
+          els.tokenValue.textContent = `${token.slice(0, 18)}...`;
+          setStatus('widget completed, token received', true);
+          log('Widget callback fired with a verification token.', 'ok');
+        },
+        expiredCallback() {
+          state.token = '';
+          els.tokenValue.textContent = 'expired';
+          setStatus('token expired, complete the widget again', false);
+          log('Token expired.', 'bad');
+        },
+      });
+
+      log(`Widget rendered with widgetId ${state.widgetId}.`);
+      setStatus('widget loaded, waiting for completion', true);
+    }
+
+    async function registerSiteAndLoad() {
+      await loadHumoraScript();
+
+      const payload = {
+        domain: els.domain.value.trim(),
+        email: els.email.value.trim(),
+      };
+
+      log(`Registering site via ${getApiOriginCandidates().join(' or ')} ...`);
+      const { response, data, apiOrigin } = await requestJson('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok || !data.sitekey) {
+        throw new Error(data.error || 'site-registration-failed');
+      }
+
+      state.sitekey = data.sitekey;
+      state.token = '';
+      els.sitekeyValue.textContent = state.sitekey;
+      els.tokenValue.textContent = 'none yet';
+      els.verdictValue.textContent = 'pending';
+      els.scoreValue.textContent = '-';
+      log(`Site registered through ${apiOrigin}. sitekey = ${state.sitekey}`, 'ok');
+
+      renderWidget();
+    }
+
+    async function verifyToken() {
+      if (!state.token) {
+        throw new Error('No token available yet. Complete the widget first.');
+      }
+
+      log(`Verifying token via ${state.resolvedApiOrigin || trimOrigin(els.apiOrigin.value)} ...`);
+      const { response, data, apiOrigin } = await requestJson('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: state.token,
+          sitekey: state.sitekey,
+        }),
+      });
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'token-verification-failed');
+      }
+
+      els.verdictValue.textContent = data.verdict;
+      els.scoreValue.textContent = String(data.score);
+      setStatus(`backend verified token successfully (${data.verdict})`, true);
+      log(`Verification succeeded through ${apiOrigin}. score=${data.score}, verdict=${data.verdict}`, 'ok');
+    }
+
+    els.widgetOrigin.value = guessWidgetOrigin();
+    els.apiOrigin.value = guessApiOrigin();
+
+    els.registerBtn.addEventListener('click', async () => {
+      try {
+        await registerSiteAndLoad();
+      } catch (error) {
+        setStatus(error.message, false);
+        log(`Register/load failed: ${error.message}`, 'bad');
+      }
+    });
+
+    els.verifyBtn.addEventListener('click', async () => {
+      try {
+        await verifyToken();
+      } catch (error) {
+        setStatus(error.message, false);
+        log(`Verify failed: ${error.message}`, 'bad');
+      }
+    });
+
+    els.resetBtn.addEventListener('click', () => {
+      if (window.humora) {
+        window.humora.reset(state.widgetId);
+        state.token = '';
+        els.tokenValue.textContent = 'reset';
+        els.verdictValue.textContent = 'pending';
+        els.scoreValue.textContent = '-';
+        setStatus('widget reset', true);
+        log('Widget reset requested.');
+      }
+    });
+  </script>
+</body>
+
+</html>

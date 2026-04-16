@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function OptionCard({ text, isSelected, onSelect }) {
+export default function OptionCard({ text, isSelected, onSelect, onHover }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const baseStyle = {
@@ -53,7 +53,10 @@ export default function OptionCard({ text, isSelected, onSelect }) {
     <div
       style={computedStyle}
       onClick={onSelect}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        onHover?.();
+      }}
       onMouseLeave={() => setIsHovered(false)}>
       {isSelected && (
         <span
