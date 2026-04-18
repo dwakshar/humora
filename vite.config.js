@@ -26,6 +26,7 @@ export default defineConfig({
       external: [],
     },
     outDir: 'dist',
+    emptyOutDir: false,
     cssCodeSplit: false,
   },
 });
