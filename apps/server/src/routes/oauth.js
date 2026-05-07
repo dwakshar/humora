@@ -5,14 +5,14 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { upsertOAuthUser } from '../db/index.js';
 import { signAuthToken } from '../lib/jwt.js';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://humora-seven.vercel.app';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // ─── Passport strategies ──────────────────────────────────────────────────────
 
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: `${process.env.SERVER_URL || 'http://humora-seven.vercel.app'}/api/auth/oauth/github/callback`,
+  callbackURL: `${process.env.SERVER_URL || 'http://localhost:3001'}/api/auth/oauth/github/callback`,
   scope: ['user:email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
   try {
@@ -32,7 +32,7 @@ passport.use(new GitHubStrategy({
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: `${process.env.SERVER_URL || 'http://humora-seven.vercel.app'}/api/auth/oauth/google/callback`,
+  callbackURL: `${process.env.SERVER_URL || 'http://localhost:3001'}/api/auth/oauth/google/callback`,
 }, async (_accessToken, _refreshToken, profile, done) => {
   try {
     const email = profile.emails?.[0]?.value ?? null;
