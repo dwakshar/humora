@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@context/AuthContext";
 import HumoraVerificationModal from "@components/HumoraVerificationModal";
+import { API_BASE } from "@utils/constants";
 
 // ── Fingerprint SVG Icon ─────────────────────────────────────
 function FingerprintIcon({ size = 32, color = "#4F46E5" }) {
@@ -467,8 +468,6 @@ function InputField({
 }
 
 // ── OAuth Buttons ─────────────────────────────────────────────
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-
 function OAuthButtons() {
   const btnStyle = {
     width: "100%",

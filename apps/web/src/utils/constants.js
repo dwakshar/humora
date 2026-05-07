@@ -1,5 +1,12 @@
+const configuredApiBase = import.meta.env.VITE_API_URL?.trim()
+const isLocalhostApiBase = configuredApiBase
+  ? /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(configuredApiBase)
+  : false
+
 export const API_BASE =
-  import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:3001' : '')
+  configuredApiBase && (!isLocalhostApiBase || import.meta.env.DEV)
+    ? configuredApiBase
+    : (import.meta.env.DEV ? 'http://localhost:3001' : '')
 
 export const WIDGET_URL =
   import.meta.env.VITE_WIDGET_URL ||
