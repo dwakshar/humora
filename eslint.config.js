@@ -5,9 +5,9 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['**/dist', '**/node_modules']),
   {
-    files: ['src/**/*.{js,jsx}', 'public/**/*.{js,jsx}', 'shared/**/*.js'],
+    files: ['apps/widget/src/**/*.{js,jsx}', 'apps/web/src/**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['humora-server/**/*.js', '*.config.js', 'vite.config.js'],
+    files: ['apps/server/src/**/*.js'],
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 2020,

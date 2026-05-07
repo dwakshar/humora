@@ -5,14 +5,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
+# Dependencies
 node_modules
+**/node_modules
+
+# Build outputs
 dist
 dist-ssr
+**/dist
+
+# Env files
+.env
+.env.*
+!.env.example
+!**/.env.example
 *.local
 
-# Editor directories and files
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -23,9 +33,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Vercel
 .vercel
-.env
-.env.*
-!.env.example
-!**/.env.example
-.env*.local
+
+# Data files (generated at runtime)
+apps/server/src/data/sites.json
+apps/server/src/data/used-tokens.json

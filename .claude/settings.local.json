@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls d:/Projects/humora/.env*)",
+      "Bash(ls d:/Projects/humora/humora-server/.env*)",
+      "Bash(npm run:*)",
+      "Bash(cp -r src/. apps/widget/src/)",
+      "Bash(cp -r humora-server/routes apps/server/src/)",
+      "Bash(cp -r humora-server/lib apps/server/src/)",
+      "Bash(cp -r humora-server/data apps/server/src/)",
+      "Bash(cp -r humora-server/api apps/server/src/)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"const d = JSON.parse\\(require\\('fs'\\).readFileSync\\('d:/Projects/humora/apps/widget/src/data/questions.json','utf8'\\)\\); const cats = [...new Set\\(d.questions.map\\(q=>q.category\\)\\)]; console.log\\('categories:', cats.length, cats\\)\")",
+      "Bash(npm uninstall *)",
+      "Bash(npm search *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 26276 /F)",
+      "PowerShell(Stop-Process -Id 26276 -Force)",
+      "Bash(xargs ls *)",
+      "Bash(xargs head *)"
+    ]
+  }
+}
