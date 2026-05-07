@@ -2,8 +2,6 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import session from 'express-session';
-import connectPgSimple from 'connect-pg-simple';
 
 import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.js';
@@ -17,9 +15,6 @@ import oauthRouter, { passport } from './routes/oauth.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { apiLimiter } from './middleware/rateLimit.js';
 
-const PgStore = connectPgSimple(session);
-const isProd = process.env.NODE_ENV === 'production';
-
 const app = express();
 app.set('trust proxy', 1);
 
@@ -30,26 +25,7 @@ app.use(cors({
   credentials: true,
 }));
 
-// Session backed by Postgres so it survives across serverless invocations
-app.use(session({
-  store: new PgStore({
-    conString: process.env.DATABASE_URL,
-    ssl: isProd ? { rejectUnauthorized: false } : false,
-    createTableIfMissing: true,
-    tableName: 'session',
-    pruneSessionInterval: 60 * 10, // prune expired sessions every 10 min
-  }),
-  secret: process.env.SESSION_SECRET || 'humora-session-secret-change-this',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
-    maxAge: 10 * 60 * 1000,
-  },
-}));
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Raw body for billing webhook — must come before express.json()
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));

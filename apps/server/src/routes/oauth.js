@@ -50,10 +50,6 @@ passport.use(new GoogleStrategy({
   }
 }));
 
-// Minimal serialization — session only lives for the OAuth handshake
-passport.serializeUser((user, done) => done(null, user.id));
-passport.deserializeUser((id, done) => done(null, { id }));
-
 // ─── Router ───────────────────────────────────────────────────────────────────
 
 const router = Router();
@@ -70,12 +66,12 @@ function oauthCallback(req, res) {
 }
 
 // GitHub
-router.get('/github', passport.authenticate('github', { session: true, scope: ['user:email'] }));
-router.get('/github/callback', passport.authenticate('github', { session: true, failureRedirect: `${FRONTEND_URL}/login?error=github` }), oauthCallback);
+router.get('/github', passport.authenticate('github', { session: false, scope: ['user:email'] }));
+router.get('/github/callback', passport.authenticate('github', { session: false, failureRedirect: `${FRONTEND_URL}/login?error=github` }), oauthCallback);
 
 // Google
-router.get('/google', passport.authenticate('google', { session: true, scope: ['profile', 'email'] }));
-router.get('/google/callback', passport.authenticate('google', { session: true, failureRedirect: `${FRONTEND_URL}/login?error=google` }), oauthCallback);
+router.get('/google', passport.authenticate('google', { session: false, scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${FRONTEND_URL}/login?error=google` }), oauthCallback);
 
 export { passport };
 export default router;

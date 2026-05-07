@@ -3,7 +3,6 @@ import { useState, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@context/AuthContext";
 import HumoraVerificationModal from "@components/HumoraVerificationModal";
-import { API_BASE } from "@utils/constants";
 
 // ── Fingerprint SVG Icon ─────────────────────────────────────
 function FingerprintIcon({ size = 32, color = "#4F46E5" }) {
@@ -469,6 +468,8 @@ function InputField({
 
 // ── OAuth Buttons ─────────────────────────────────────────────
 function OAuthButtons() {
+  const githubAuthUrl = "/api/auth/oauth/github";
+  const googleAuthUrl = "/api/auth/oauth/google";
   const btnStyle = {
     width: "100%",
     height: 48,
@@ -491,7 +492,7 @@ function OAuthButtons() {
     <>
       <button
         style={btnStyle}
-        onClick={() => { window.location.href = `${API_BASE}/api/auth/oauth/github` }}
+        onClick={() => { window.location.href = githubAuthUrl }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "#F9FAFB";
           e.currentTarget.style.borderColor = "#D1D5DB";
@@ -504,7 +505,7 @@ function OAuthButtons() {
       </button>
       <button
         style={btnStyle}
-        onClick={() => { window.location.href = `${API_BASE}/api/auth/oauth/google` }}
+        onClick={() => { window.location.href = googleAuthUrl }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "#F9FAFB";
           e.currentTarget.style.borderColor = "#D1D5DB";
