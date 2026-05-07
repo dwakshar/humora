@@ -1,8 +1,9 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState, useCallback } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "@context/AuthContext";
 import HumoraVerificationModal from "@components/HumoraVerificationModal";
+import { useAuth } from "@context/AuthContext";
+import { requireSupabase } from "@utils/supabase";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // ── Fingerprint SVG Icon ─────────────────────────────────────
 function FingerprintIcon({ size = 32, color = "#4F46E5" }) {
@@ -468,8 +469,21 @@ function InputField({
 
 // ── OAuth Buttons ─────────────────────────────────────────────
 function OAuthButtons() {
-  const githubAuthUrl = "/api/auth/oauth/github";
-  const googleAuthUrl = "/api/auth/oauth/google";
+  const startOAuth = async (provider) => {
+    try {
+      const supabase = requireSupabase();
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo },
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      const message = encodeURIComponent(error.message || "oauth-init-failed");
+      window.location.href = `${window.location.pathname}?error=${message}`;
+    }
+  };
   const btnStyle = {
     width: "100%",
     height: 48,
@@ -492,7 +506,9 @@ function OAuthButtons() {
     <>
       <button
         style={btnStyle}
-        onClick={() => { window.location.href = githubAuthUrl }}
+        onClick={() => {
+          startOAuth("github");
+        }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "#F9FAFB";
           e.currentTarget.style.borderColor = "#D1D5DB";
@@ -505,7 +521,9 @@ function OAuthButtons() {
       </button>
       <button
         style={btnStyle}
-        onClick={() => { window.location.href = googleAuthUrl }}
+        onClick={() => {
+          startOAuth("google");
+        }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "#F9FAFB";
           e.currentTarget.style.borderColor = "#D1D5DB";
@@ -626,18 +644,21 @@ export function LoginPage() {
     setShowVerification(true);
   };
 
-  const handleVerified = useCallback(async (_token) => {
-    setShowVerification(false);
-    setLoading(true);
-    try {
-      await login(email, password);
-      navigate(from, { replace: true });
-    } catch (err) {
-      setError(err.message || "Invalid email or password. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  }, [email, password, login, navigate, from]);
+  const handleVerified = useCallback(
+    async (_token) => {
+      setShowVerification(false);
+      setLoading(true);
+      try {
+        await login(email, password);
+        navigate(from, { replace: true });
+      } catch (err) {
+        setError(err.message || "Invalid email or password. Try again.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [email, password, login, navigate, from]
+  );
 
   return (
     <>
@@ -1036,23 +1057,28 @@ export function SignupPage() {
     setShowVerification(true);
   };
 
-  const handleVerified = useCallback(async (_token) => {
-    setShowVerification(false);
-    setLoading(true);
-    try {
-      await signup(name, email, password);
-      navigate("/onboarding");
-    } catch (err) {
-      const msg = err.message || "";
-      if (msg.includes("already exists") || msg.includes("email-taken")) {
-        setFieldErrors({ email: "An account with this email already exists" });
-      } else {
-        setFieldErrors({ email: msg || "Signup failed. Please try again." });
+  const handleVerified = useCallback(
+    async (_token) => {
+      setShowVerification(false);
+      setLoading(true);
+      try {
+        await signup(name, email, password);
+        navigate("/onboarding");
+      } catch (err) {
+        const msg = err.message || "";
+        if (msg.includes("already exists") || msg.includes("email-taken")) {
+          setFieldErrors({
+            email: "An account with this email already exists",
+          });
+        } else {
+          setFieldErrors({ email: msg || "Signup failed. Please try again." });
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [name, email, password, signup, navigate]);
+    },
+    [name, email, password, signup, navigate]
+  );
 
   return (
     <>

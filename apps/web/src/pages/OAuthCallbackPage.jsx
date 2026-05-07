@@ -2,10 +2,11 @@ import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@context/AuthContext'
 import { api } from '@utils/api'
+import { requireSupabase } from '@utils/supabase'
 
 export default function OAuthCallbackPage() {
   const [params] = useSearchParams()
-  const navigate  = useNavigate()
+  const navigate = useNavigate()
   const { setUserFromToken } = useAuth()
   const ran = useRef(false)
 
@@ -13,25 +14,62 @@ export default function OAuthCallbackPage() {
     if (ran.current) return
     ran.current = true
 
+    const finishLegacyOAuth = async (token) => {
+      localStorage.setItem('humora_auth_token', token)
+
+      try {
+        const user = await api.auth.me()
+        setUserFromToken(user)
+        navigate('/dashboard', { replace: true })
+      } catch {
+        localStorage.removeItem('humora_auth_token')
+        navigate('/login?error=auth-failed', { replace: true })
+      }
+    }
+
+    const finishSupabaseOAuth = async () => {
+      try {
+        const supabase = requireSupabase()
+        const code = params.get('code')
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code)
+          if (error) throw error
+        }
+
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession()
+
+        if (sessionError) throw sessionError
+        if (!session?.access_token) throw new Error('Supabase session not found')
+
+        const { user, token } = await api.auth.exchangeSupabase(session.access_token)
+        localStorage.setItem('humora_auth_token', token)
+        setUserFromToken(user)
+        await supabase.auth.signOut()
+        navigate('/dashboard', { replace: true })
+      } catch (error) {
+        navigate(`/login?error=${encodeURIComponent(error.message || 'oauth-failed')}`, { replace: true })
+      }
+    }
+
     const token = params.get('token')
     const error = params.get('error')
 
-    if (error || !token) {
-      navigate('/login?error=' + (error || 'oauth-failed'), { replace: true })
+    if (error) {
+      navigate('/login?error=' + error, { replace: true })
       return
     }
 
-    localStorage.setItem('humora_auth_token', token)
-    api.auth.me()
-      .then(user => {
-        setUserFromToken(user)
-        navigate('/dashboard', { replace: true })
-      })
-      .catch(() => {
-        localStorage.removeItem('humora_auth_token')
-        navigate('/login?error=auth-failed', { replace: true })
-      })
-  }, [])
+    if (token) {
+      finishLegacyOAuth(token)
+      return
+    }
+
+    finishSupabaseOAuth()
+  }, [navigate, params, setUserFromToken])
 
   return (
     <div style={{
@@ -51,7 +89,7 @@ export default function OAuthCallbackPage() {
           animation: 'spin 0.7s linear infinite',
           margin: '0 auto 16px',
         }} />
-        <p style={{ color: '#6B7280', fontSize: 14 }}>Signing you in…</p>
+        <p style={{ color: '#6B7280', fontSize: 14 }}>Signing you in...</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
