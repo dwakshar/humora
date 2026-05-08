@@ -1,6 +1,7 @@
 {
   "name": "humora",
   "private": true,
+  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
