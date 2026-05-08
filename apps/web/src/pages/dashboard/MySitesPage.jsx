@@ -2,160 +2,94 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@utils/api";
 
-const CODE_SNIPPETS = {
-  Popup: (sitekey) => `<!-- ─── STEP 1: Paste this in your <head> tag ─────────────────── -->
+const POPUP_HTML = (sitekey) => `<!-- Step 1: Add to your <head> -->
 <script src="https://widget.humora.io/humora.min.js" async defer></script>
 
-<!-- ─── STEP 2: Your form — nothing special needed here ──────── -->
+<!-- Step 2: Your existing form — no changes needed -->
 <form id="my-form">
   <input type="email"    id="email"    placeholder="Email" />
   <input type="password" id="password" placeholder="Password" />
   <button type="submit">Sign Up</button>
 </form>
 
-<!-- ─── STEP 3: The popup (hidden by default) ────────────────── -->
+<!-- Step 3: Hidden popup (stays invisible until triggered) -->
 <div id="humora-backdrop" style="display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.55);z-index:999;
+  background:rgba(0,0,0,0.55);z-index:9999;
   align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:20px;max-width:400px;
-    width:100%;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.2);">
-    <div style="padding:14px 18px;border-bottom:1px solid #eee;
+  <div style="background:#fff;border-radius:20px;max-width:400px;width:100%;
+    overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.2);">
+    <div style="padding:14px 18px;border-bottom:1px solid #F3F4F6;
       display:flex;justify-content:space-between;align-items:center;
-      font-family:sans-serif;font-size:13px;font-weight:600;">
-      🖐 Human Verification
-      <button onclick="closePopup()" style="background:none;border:none;
-        font-size:20px;cursor:pointer;color:#9CA3AF;">×</button>
+      font-family:sans-serif;font-size:13px;font-weight:600;color:#0F0F0F;">
+      Human Verification
+      <button onclick="closeHumoraPopup()" style="background:none;border:none;
+        font-size:22px;cursor:pointer;color:#9CA3AF;line-height:1;">×</button>
     </div>
     <div id="humora-widget"></div>
   </div>
 </div>
 
-<!-- ─── STEP 4: Wire it up ────────────────────────────────────── -->
+<!-- Step 4: Wire everything together -->
 <script>
-  var verifiedToken = null;
+  var _humoraToken = null;
 
-  // Intercept submit → show popup first
   document.getElementById('my-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    if (verifiedToken) {
-      submitForm(); // already verified, go straight through
+    if (_humoraToken) {
+      submitMyForm();
     } else {
       document.getElementById('humora-backdrop').style.display = 'flex';
     }
   });
 
-  function closePopup() {
+  function closeHumoraPopup() {
     document.getElementById('humora-backdrop').style.display = 'none';
   }
 
-  function submitForm() {
-    // ↓ Send form data + token to YOUR backend
+  function submitMyForm() {
     fetch('/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email:        document.getElementById('email').value,
         password:     document.getElementById('password').value,
-        humora_token: verifiedToken,  // ← pass this to your server
+        humora_token: _humoraToken,
       }),
     })
     .then(r => r.json())
     .then(data => { if (data.success) window.location = '/dashboard'; });
   }
 
-  // Initialize widget once the script loads
   humora.ready(function() {
     humora.render('humora-widget', {
-      sitekey: '${sitekey}',  // ← your sitekey (already filled in!)
+      sitekey: '${sitekey}',
 
       callback: function(token) {
-        verifiedToken = token;  // user passed ✓
-        closePopup();
-        submitForm();           // fire the real submission
+        _humoraToken = token;
+        closeHumoraPopup();
+        submitMyForm();
       },
 
       expiredCallback: function() {
-        verifiedToken = null;   // token expired after 5 min
+        _humoraToken = null;
       },
     });
   });
-</script>
+</script>`;
 
-<!-- ─── STEP 5 (on your server): Verify the token ────────────── -->
-<!-- See the "Server Verify" tab above for backend code →         -->`,
-
-  Inline: (sitekey) => `<!-- ─── STEP 1: Paste this in your <head> tag ─────────────────── -->
-<script src="https://widget.humora.io/humora.min.js" async defer></script>
-
-<!-- ─── STEP 2: Your form with widget inside it ──────────────── -->
-<form id="my-form">
-  <input type="email"    id="email"    placeholder="Email" />
-  <input type="password" id="password" placeholder="Password" />
-
-  <!-- Widget appears here — user verifies before clicking submit -->
-  <div id="humora-widget"></div>
-
-  <!-- Hidden field that holds the token when user passes -->
-  <input type="hidden" id="humora-token" name="humora_token" />
-
-  <!-- Button is disabled until user verifies -->
-  <button type="submit" id="submit-btn" disabled>Sign Up</button>
-</form>
-
-<!-- ─── STEP 3: Initialize the widget ────────────────────────── -->
-<script>
-  humora.ready(function() {
-    humora.render('humora-widget', {
-      sitekey: '${sitekey}',  // ← your sitekey (already filled in!)
-
-      callback: function(token) {
-        // User passed ✓ — save token, enable button
-        document.getElementById('humora-token').value = token;
-        document.getElementById('submit-btn').disabled = false;
-      },
-
-      expiredCallback: function() {
-        // Token expired after 5 min — lock form again
-        document.getElementById('humora-token').value = '';
-        document.getElementById('submit-btn').disabled = true;
-      },
-    });
-  });
-
-  // On submit, send the token to your server
-  document.getElementById('my-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var token = document.getElementById('humora-token').value;
-    if (!token) return; // safety check
-
-    fetch('/api/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email:        document.getElementById('email').value,
-        password:     document.getElementById('password').value,
-        humora_token: token,  // ← your server must verify this
-      }),
-    })
-    .then(r => r.json())
-    .then(data => { if (data.success) window.location = '/dashboard'; });
-  });
-</script>`,
-
-  React: (sitekey) => `// ─── STEP 1: Add script to public/index.html (or index.html) ──
+const POPUP_REACT = (sitekey) => `// Step 1: Add to public/index.html
 // <script src="https://widget.humora.io/humora.min.js" async defer></script>
 
-// ─── STEP 2: Create a reusable popup component ────────────────
 import { useState, useRef, useEffect, useCallback } from 'react'
 
+// Reusable popup component
 function HumoraPopup({ isOpen, onVerified, onClose }) {
-  const ref = useRef(null)
+  const containerRef = useRef(null)
 
   useEffect(() => {
-    // Render the widget when popup opens
-    if (!isOpen || !window.humora || !ref.current) return
-    window.humora.render(ref.current, {
-      sitekey: '${sitekey}',  // ← your sitekey (already filled in!)
+    if (!isOpen || !window.humora || !containerRef.current) return
+    window.humora.render(containerRef.current, {
+      sitekey: '${sitekey}',
       callback: (token) => onVerified(token),
       expiredCallback: () => {},
     })
@@ -164,48 +98,51 @@ function HumoraPopup({ isOpen, onVerified, onClose }) {
   if (!isOpen) return null
 
   return (
-    // Clicking the dark backdrop closes the popup
-    <div onClick={onClose} style={{
-      position: 'fixed', inset: 0, zIndex: 999,
-      background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(3px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: 'white', borderRadius: 20,
-        width: '100%', maxWidth: 400, overflow: 'hidden',
-        boxShadow: '0 24px 80px rgba(0,0,0,0.2)',
-      }}>
-        {/* Header bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between',
-          alignItems: 'center', padding: '14px 18px',
-          borderBottom: '1px solid #F3F4F6', fontFamily: 'sans-serif',
-          fontSize: 13, fontWeight: 600 }}>
-          🖐 Human Verification
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(3px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: '#fff', borderRadius: 20,
+          width: '100%', maxWidth: 400, overflow: 'hidden',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.2)',
+        }}
+      >
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          padding: '14px 18px', borderBottom: '1px solid #F3F4F6',
+          fontFamily: 'sans-serif', fontSize: 13, fontWeight: 600, color: '#0F0F0F',
+        }}>
+          Human Verification
           <button onClick={onClose} style={{
             background: 'none', border: 'none',
-            fontSize: 20, cursor: 'pointer', color: '#9CA3AF' }}>×</button>
+            fontSize: 22, cursor: 'pointer', color: '#9CA3AF', lineHeight: 1,
+          }}>×</button>
         </div>
-        {/* Widget mounts here */}
-        <div ref={ref} />
+        <div ref={containerRef} />
       </div>
     </div>
   )
 }
 
-// ─── STEP 3: Use it in your form ─────────────────────────────
+// Step 2: Use it in your form
 export default function SignupForm() {
   const [email, setEmail]         = useState('')
   const [password, setPassword]   = useState('')
   const [showPopup, setShowPopup] = useState(false)
   const [loading, setLoading]     = useState(false)
 
-  // Submit button clicked → show popup instead of submitting
   const handleSubmit = (e) => {
     e.preventDefault()
     setShowPopup(true)
   }
 
-  // User passed verification → now fire the real API call
   const handleVerified = useCallback(async (token) => {
     setShowPopup(false)
     setLoading(true)
@@ -221,75 +158,82 @@ export default function SignupForm() {
 
   return (
     <>
-      {/* The popup — hidden until user clicks submit */}
       <HumoraPopup
         isOpen={showPopup}
         onVerified={handleVerified}
         onClose={() => setShowPopup(false)}
       />
-
       <form onSubmit={handleSubmit}>
-        <input type="email"    value={email}
-          onChange={e => setEmail(e.target.value)}    placeholder="Email" />
-        <input type="password" value={password}
-          onChange={e => setPassword(e.target.value)} placeholder="Password" />
+        <input type="email"    value={email}    onChange={e => setEmail(e.target.value)}    placeholder="Email" />
+        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
         <button type="submit" disabled={loading}>
           {loading ? 'Creating account…' : 'Sign Up'}
         </button>
       </form>
     </>
   )
-}`,
+}`;
 
-  Server: () => `// ─── Always verify the token on YOUR server ──────────────────
-// Never trust the token without checking it — anyone can fake a request.
-
-// ── Node.js / Express ────────────────────────────────────────
+const SERVER_SNIPPETS = {
+  "Node.js": `// POST /api/signup — verify the token before creating the user
 app.post('/api/signup', async (req, res) => {
   const { email, password, humora_token } = req.body
 
-  // 1. Send token to Humora API for verification
   const check = await fetch('https://api.humora.io/api/verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       token:   humora_token,
-      sitekey: process.env.HUMORA_SITE_KEY, // ← your secret key (.env file)
+      sitekey: process.env.HUMORA_SITE_KEY,  // from your .env
     }),
   }).then(r => r.json())
 
-  // 2. If check failed → reject the request
   if (!check.success) {
-    return res.status(400).json({ error: 'Please complete verification' })
+    return res.status(400).json({ error: 'Human verification required' })
   }
 
-  // 3. Token is valid → do your real work
   await createUser(email, password)
   res.json({ success: true })
-})
+})`,
 
-// ── Python / Flask ───────────────────────────────────────────
-# @app.route('/api/signup', methods=['POST'])
-# def signup():
-#     data  = request.get_json()
-#     check = requests.post('https://api.humora.io/api/verify', json={
-#         'token':   data['humora_token'],
-#         'sitekey': os.environ['HUMORA_SITE_KEY'],
-#     }).json()
-#     if not check.get('success'):
-#         return jsonify({'error': 'Verification required'}), 400
-#     create_user(data['email'], data['password'])
-#     return jsonify({'success': True})
+  Python: `# POST /api/signup — verify the token before creating the user
+@app.route('/api/signup', methods=['POST'])
+def signup():
+    data  = request.get_json()
+    check = requests.post('https://api.humora.io/api/verify', json={
+        'token':   data['humora_token'],
+        'sitekey': os.environ['HUMORA_SITE_KEY'],  # from your env
+    }).json()
 
-// ── PHP ──────────────────────────────────────────────────────
-// $check = json_decode(file_get_contents('https://api.humora.io/api/verify',
-//   false, stream_context_create(['http' => ['method' => 'POST',
-//     'header' => 'Content-Type: application/json',
-//     'content' => json_encode([
-//       'token'   => $_POST['humora_token'],
-//       'sitekey' => getenv('HUMORA_SITE_KEY'),
-//     ])]])), true);
-// if (!$check['success']) { http_response_code(400); exit; }`,
+    if not check.get('success'):
+        return jsonify({'error': 'Human verification required'}), 400
+
+    create_user(data['email'], data['password'])
+    return jsonify({'success': True})`,
+
+  PHP: `<?php
+// POST /api/signup — verify the token before creating the user
+$data  = json_decode(file_get_contents('php://input'), true);
+$check = json_decode(file_get_contents(
+  'https://api.humora.io/api/verify', false,
+  stream_context_create(['http' => [
+    'method'  => 'POST',
+    'header'  => 'Content-Type: application/json',
+    'content' => json_encode([
+      'token'   => $data['humora_token'],
+      'sitekey' => getenv('HUMORA_SITE_KEY'),  // from your env
+    ]),
+  ]])
+), true);
+
+if (!$check['success']) {
+  http_response_code(400);
+  echo json_encode(['error' => 'Human verification required']);
+  exit;
+}
+
+create_user($data['email'], $data['password']);
+echo json_encode(['success' => true]);`,
 };
 
 function getFavicon(domain) {
@@ -805,138 +749,187 @@ function AddSitePanel({ open, onClose, onAdd }) {
   );
 }
 
-const TAB_META = {
-  Popup:  { label: "Popup Mode ★", lang: "HTML" },
-  Inline: { label: "Inline",       lang: "HTML" },
-  React:  { label: "React",        lang: "JSX"  },
-  Server: { label: "Server Verify", lang: "Node.js" },
-};
+function CodeBlock({ code, lang }) {
+  return (
+    <div style={{ backgroundColor: "#0D1117", borderRadius: 12, overflow: "hidden", border: "1px solid #30363D" }}>
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "10px 16px", backgroundColor: "#161B22", borderBottom: "1px solid #30363D",
+      }}>
+        <div style={{ display: "flex", gap: 6 }}>
+          {["#FF5F57", "#FFBD2E", "#28C840"].map((c) => (
+            <div key={c} style={{ width: 11, height: 11, borderRadius: "50%", backgroundColor: c }} />
+          ))}
+        </div>
+        <span style={{ fontFamily: "Archivo, sans-serif", fontSize: 11, color: "#8B949E", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+          {lang}
+        </span>
+        <CopyButton text={code} />
+      </div>
+      <pre style={{
+        margin: 0, padding: "16px", overflowX: "auto",
+        fontFamily: "'Fira Code', 'Cascadia Code', monospace",
+        fontSize: 12, lineHeight: 1.7, color: "#E6EDF3",
+      }}>
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
+function LangPill({ label, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontFamily: "Archivo, sans-serif", fontSize: 12, fontWeight: active ? 600 : 500,
+        color: active ? "#4F46E5" : "#6B7280",
+        backgroundColor: active ? "#EEF2FF" : "transparent",
+        border: active ? "1px solid #C7D2FE" : "1px solid #E5E7EB",
+        borderRadius: 7, padding: "5px 12px", cursor: "pointer", transition: "all 120ms",
+      }}
+    >
+      {label}
+    </button>
+  );
+}
 
 function IntegrationSnippet({ site }) {
-  const [tab, setTab] = useState("Popup");
-  const tabs = ["Popup", "Inline", "React", "Server"];
+  const [frontendLang, setFrontendLang] = useState("HTML");
+  const [serverLang, setServerLang]     = useState("Node.js");
 
   if (!site) return null;
 
-  const snippet = tab === "Server"
-    ? CODE_SNIPPETS.Server()
-    : CODE_SNIPPETS[tab](site.sitekey);
+  const frontendCode = frontendLang === "HTML" ? POPUP_HTML(site.sitekey) : POPUP_REACT(site.sitekey);
+  const serverCode   = SERVER_SNIPPETS[serverLang];
 
   return (
     <div style={{
-      backgroundColor: "#fff", borderRadius: 20, padding: 24,
+      backgroundColor: "#fff", borderRadius: 20, padding: 28,
       boxShadow: "0 1px 3px rgba(0,0,0,0.06)", marginTop: 20,
       border: "1px solid #E5E7EB",
     }}>
-      {/* Header */}
-      <div style={{ marginBottom: 16 }}>
-        <h3 style={{ fontFamily: "Archivo, sans-serif", fontWeight: 700, fontSize: 15, color: "#0F0F0F", margin: "0 0 6px" }}>
-          Quick integration for {site.domain}
-        </h3>
-        <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 13, color: "#6B7280", margin: 0 }}>
-          Your sitekey is already filled in below — just copy and paste into your project.
-        </p>
+
+      {/* ── Header ── */}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+        <div>
+          <h3 style={{ fontFamily: "Archivo, sans-serif", fontWeight: 800, fontSize: 16, color: "#0F0F0F", margin: "0 0 4px" }}>
+            Quick Integration
+          </h3>
+          <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 13, color: "#6B7280", margin: 0 }}>
+            Your sitekey is pre-filled — copy and paste into your project.
+          </p>
+        </div>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8,
+          backgroundColor: "#F9FAFB", border: "1px solid #E5E7EB",
+          borderRadius: 10, padding: "8px 12px",
+        }}>
+          <span style={{ fontFamily: "Archivo, sans-serif", fontSize: 11, color: "#9CA3AF", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em" }}>Sitekey</span>
+          <code style={{ fontFamily: "'Fira Code', 'Cascadia Code', monospace", fontSize: 12, color: "#0F0F0F" }}>
+            {site.sitekey.slice(0, 12)}••••
+          </code>
+          <CopyButton text={site.sitekey} />
+        </div>
       </div>
 
-      {/* How it works callout */}
+      {/* ── How it works ── */}
       <div style={{
-        display: "flex", gap: 0, marginBottom: 16, borderRadius: 10, overflow: "hidden",
+        display: "flex", marginBottom: 24, borderRadius: 12, overflow: "hidden",
         border: "1px solid #E5E7EB", fontFamily: "Archivo, sans-serif", fontSize: 12,
       }}>
         {[
-          { n: "1", text: "Add the script tag to your HTML" },
-          { n: "2", text: "User clicks submit → popup appears" },
-          { n: "3", text: "User passes → token sent to your server" },
+          { n: "1", icon: "📄", text: "Add the script tag to your page" },
+          { n: "2", icon: "🖐", text: "Submit triggers the verification popup" },
+          { n: "3", icon: "✅", text: "User passes → token verified on your server" },
         ].map((step, i) => (
           <div key={i} style={{
-            flex: 1, padding: "10px 14px", background: "#F9FAFB",
+            flex: 1, padding: "12px 16px", background: i === 1 ? "#F5F3FF" : "#F9FAFB",
             borderRight: i < 2 ? "1px solid #E5E7EB" : "none",
-            display: "flex", alignItems: "center", gap: 8,
+            display: "flex", alignItems: "flex-start", gap: 10,
           }}>
             <span style={{
-              width: 20, height: 20, borderRadius: "50%", background: "#EEF2FF",
-              color: "#4F46E5", fontWeight: 700, fontSize: 11,
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              width: 22, height: 22, borderRadius: "50%",
+              background: i === 1 ? "#EEF2FF" : "#fff",
+              border: "1px solid " + (i === 1 ? "#C7D2FE" : "#E5E7EB"),
+              color: "#4F46E5", fontWeight: 700, fontSize: 10,
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1,
             }}>{step.n}</span>
-            <span style={{ color: "#374151", lineHeight: 1.4 }}>{step.text}</span>
+            <div>
+              <div style={{ fontSize: 15, marginBottom: 2 }}>{step.icon}</div>
+              <div style={{ color: "#374151", lineHeight: 1.45 }}>{step.text}</div>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
-        {tabs.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              fontFamily: "Archivo, sans-serif", fontSize: 13,
-              fontWeight: tab === t ? 600 : 400,
-              color: tab === t ? "#4F46E5" : "#6B7280",
-              backgroundColor: tab === t ? "#EEF2FF" : "transparent",
-              border: tab === t ? "1px solid #C7D2FE" : "1px solid transparent",
-              borderRadius: 8, padding: "7px 14px", cursor: "pointer", transition: "all 120ms",
-            }}
-          >
-            {TAB_META[t].label}
-          </button>
-        ))}
+      {/* ── Frontend code ── */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+          <div>
+            <span style={{ fontFamily: "Archivo, sans-serif", fontWeight: 700, fontSize: 13, color: "#0F0F0F" }}>
+              Frontend — Popup Integration
+            </span>
+            <span style={{
+              marginLeft: 8,
+              fontFamily: "Archivo, sans-serif", fontSize: 11, fontWeight: 600,
+              color: "#059669", backgroundColor: "#ECFDF5",
+              padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.04em",
+            }}>
+              Popup Mode
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: 6 }}>
+            <LangPill label="HTML" active={frontendLang === "HTML"} onClick={() => setFrontendLang("HTML")} />
+            <LangPill label="React" active={frontendLang === "React"} onClick={() => setFrontendLang("React")} />
+          </div>
+        </div>
+        <CodeBlock code={frontendCode} lang={frontendLang === "HTML" ? "HTML + JS" : "JSX"} />
       </div>
 
-      {/* Tab description */}
-      {tab === "Popup" && (
-        <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 12, color: "#6B7280", margin: "0 0 12px", lineHeight: 1.5 }}>
-          Recommended for most sites. The verification popup appears when your user clicks submit — no changes to your form layout needed.
-        </p>
-      )}
-      {tab === "Inline" && (
-        <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 12, color: "#6B7280", margin: "0 0 12px", lineHeight: 1.5 }}>
-          The widget sits inside your form. The submit button stays disabled until the user passes verification.
-        </p>
-      )}
-      {tab === "Server" && (
+      {/* ── Divider ── */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div style={{ flex: 1, height: 1, backgroundColor: "#E5E7EB" }} />
+        <span style={{ fontFamily: "Archivo, sans-serif", fontSize: 11, color: "#9CA3AF", fontWeight: 500, whiteSpace: "nowrap" }}>
+          STEP 4 · SERVER VERIFICATION
+        </span>
+        <div style={{ flex: 1, height: 1, backgroundColor: "#E5E7EB" }} />
+      </div>
+
+      {/* ── Server verification ── */}
+      <div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+          <div>
+            <span style={{ fontFamily: "Archivo, sans-serif", fontWeight: 700, fontSize: 13, color: "#0F0F0F" }}>
+              Backend — Verify the Token
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: 6 }}>
+            {["Node.js", "Python", "PHP"].map((l) => (
+              <LangPill key={l} label={l} active={serverLang === l} onClick={() => setServerLang(l)} />
+            ))}
+          </div>
+        </div>
+
         <div style={{
           display: "flex", gap: 10, alignItems: "flex-start", padding: "10px 14px",
-          background: "#FFFBEB", borderRadius: 8, marginBottom: 12, border: "1px solid #FDE68A",
+          background: "#FFFBEB", borderRadius: 8, marginBottom: 10, border: "1px solid #FDE68A",
         }}>
           <span style={{ fontSize: 14, flexShrink: 0 }}>⚠️</span>
           <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 12, color: "#92400E", margin: 0, lineHeight: 1.5 }}>
-            Always verify tokens on your server — never trust them client-side only. Set <code style={{ background: "#FEF3C7", padding: "1px 4px", borderRadius: 3 }}>HUMORA_SITE_KEY</code> in your server's environment variables (not the sitekey from the frontend — this is your secret key).
+            Always verify the token on your server — never trust client-side only. Use{" "}
+            <code style={{ background: "#FEF3C7", padding: "1px 4px", borderRadius: 3, fontSize: 11 }}>HUMORA_SITE_KEY</code>{" "}
+            from your environment variables, not the frontend sitekey.
           </p>
         </div>
-      )}
 
-      {/* Code block */}
-      <div style={{
-        backgroundColor: "#0D1117", borderRadius: 12, overflow: "hidden", border: "1px solid #30363D",
-      }}>
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "10px 16px", backgroundColor: "#161B22", borderBottom: "1px solid #30363D",
-        }}>
-          <div style={{ display: "flex", gap: 6 }}>
-            {[{ c: "#FF5F57" }, { c: "#FFBD2E" }, { c: "#28C840" }].map(({ c }) => (
-              <div key={c} style={{ width: 11, height: 11, borderRadius: "50%", backgroundColor: c }} />
-            ))}
-          </div>
-          <span style={{ fontFamily: "Archivo, sans-serif", fontSize: 11, color: "#8B949E", textTransform: "uppercase", letterSpacing: "0.04em" }}>
-            {TAB_META[tab].lang}
-          </span>
-          <CopyButton text={snippet} />
-        </div>
-        <pre style={{
-          margin: 0, padding: "16px", overflowX: "auto",
-          fontFamily: "'Fira Code', 'Cascadia Code', monospace",
-          fontSize: 12, lineHeight: 1.7, color: "#E6EDF3",
-        }}>
-          <code>{snippet}</code>
-        </pre>
+        <CodeBlock code={serverCode} lang={serverLang} />
       </div>
 
-      {/* Footer link */}
-      <div style={{ marginTop: 14, textAlign: "right" }}>
+      {/* ── Footer ── */}
+      <div style={{ marginTop: 16, textAlign: "right" }}>
         <a href="/docs" style={{ fontFamily: "Archivo, sans-serif", fontSize: 12, color: "#4F46E5", fontWeight: 600, textDecoration: "none" }}>
-          Full integration guide & API reference →
+          Full API reference & integration guide →
         </a>
       </div>
     </div>
