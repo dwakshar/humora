@@ -47,6 +47,12 @@ export const api = {
     deleteSite: (id) => api.delete(`/api/sites/${id}`),
   },
 
+  keys: {
+    list:   ()         => api.get('/api/keys'),
+    create: (name)     => api.post('/api/keys', { name }),
+    revoke: (id)       => api.delete(`/api/keys/${id}`),
+  },
+
   billing: {
     current: () => api.get('/api/billing'),
     history: () => api.get('/api/billing/history'),

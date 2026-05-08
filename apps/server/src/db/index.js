@@ -71,7 +71,8 @@ export async function getSiteByKey(sitekey) {
 }
 
 export async function getSitesByUserId(userId) {
-  return db.select().from(schema.sites).where(eq(schema.sites.userId, userId));
+  return db.select().from(schema.sites)
+    .where(and(eq(schema.sites.userId, userId), eq(schema.sites.active, true)));
 }
 
 export async function createSite(siteData) {
@@ -116,6 +117,28 @@ export async function hasUsedToken(jti) {
 
 export async function addUsedToken(jti) {
   await db.insert(schema.usedTokens).values({ jti, createdAt: new Date().toISOString() });
+}
+
+// ─── API Keys ────────────────────────────────────────────────────────────────
+
+export async function getApiKeysByUserId(userId) {
+  return db.select().from(schema.apiKeys).where(eq(schema.apiKeys.userId, userId));
+}
+
+export async function getApiKeyById(id) {
+  const [key] = await db.select().from(schema.apiKeys).where(eq(schema.apiKeys.id, id));
+  return key ?? null;
+}
+
+export async function createApiKey(data) {
+  const [key] = await db.insert(schema.apiKeys).values(data).returning();
+  return key;
+}
+
+export async function revokeApiKey(id) {
+  await db.update(schema.apiKeys)
+    .set({ revokedAt: new Date().toISOString() })
+    .where(eq(schema.apiKeys.id, id));
 }
 
 // ─── Billing history ──────────────────────────────────────────────────────────

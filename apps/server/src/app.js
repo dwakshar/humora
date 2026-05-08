@@ -10,6 +10,7 @@ import authRouter from './routes/auth.js';
 import billingRouter from './routes/billing.js';
 import dashboardRouter from './routes/dashboard.js';
 import healthRouter from './routes/health.js';
+import keysRouter from './routes/keys.js';
 import registerRouter from './routes/register.js';
 import sitesRouter from './routes/sites.js';
 import verifyRouter from './routes/verify.js';
@@ -53,6 +54,7 @@ app.use('/api/register',  registerRouter);
 app.use('/api/dashboard',  dashboardRouter);
 app.use('/api/analytics',  analyticsRouter);
 app.use('/api/sites',      sitesRouter);
+app.use('/api/keys',       keysRouter);
 app.use('/api/billing',    billingRouter);
 
 app.use((err, _req, res, _next) => {

@@ -58,3 +58,14 @@ export const billingHistory = pgTable('billing_history', {
   createdAt:          text('created_at').notNull(),
   dodoSubscriptionId: text('dodo_subscription_id'),
 });
+
+export const apiKeys = pgTable('api_keys', {
+  id:          text('id').primaryKey(),
+  userId:      uuid('user_id').notNull().references(() => users.id),
+  name:        text('name').notNull(),
+  keyHash:     text('key_hash').notNull().unique(),
+  keyPrefix:   text('key_prefix').notNull(),
+  createdAt:   text('created_at').notNull(),
+  lastUsedAt:  text('last_used_at'),
+  revokedAt:   text('revoked_at'),
+});
