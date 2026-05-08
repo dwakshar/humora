@@ -46,8 +46,11 @@ function KeyCard({ site }) {
   const [revealed, setRevealed] = useState(false);
   const [copied, setCopied]     = useState(false);
 
-  const isLive = site.sitekey.startsWith("sk_live_");
-  const masked = site.sitekey.slice(0, 10) + "•".repeat(Math.max(0, site.sitekey.length - 10));
+  const isLive  = site.sitekey.startsWith("sk_live_");
+  // Show prefix + first 4 random chars + •••• + last 4 chars
+  const prefix  = isLive ? "sk_live_" : "sk_test_";
+  const rand    = site.sitekey.slice(prefix.length);
+  const masked  = `${prefix}${rand.slice(0, 4)}${"•".repeat(Math.max(0, rand.length - 8))}${rand.slice(-4)}`;
 
   async function copy() {
     await navigator.clipboard.writeText(site.sitekey);

@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
-import { randomUUID } from 'crypto';
+import { randomUUID, randomBytes } from 'crypto';
 
 function getSecret() {
   return new TextEncoder().encode(process.env.JWT_SECRET);
@@ -43,8 +43,5 @@ export async function verifyAuthToken(token) {
 
 export function generateSitekey(environment) {
   const prefix = environment === 'production' ? 'sk_live_' : 'sk_test_';
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let suffix = '';
-  for (let i = 0; i < 8; i++) suffix += chars[Math.floor(Math.random() * chars.length)];
-  return prefix + suffix;
+  return prefix + randomBytes(20).toString('hex');
 }
