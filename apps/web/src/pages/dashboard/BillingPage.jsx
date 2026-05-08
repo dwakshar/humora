@@ -481,31 +481,39 @@ export default function BillingPage() {
             Available Plans
           </h3>
           {/* Period toggle */}
-          <div style={{
-            display: "flex", backgroundColor: "#F3F4F6",
-            borderRadius: 10, padding: 4, gap: 4,
-          }}>
-            {["monthly", "annual"].map((p) => (
-              <button
-                key={p}
-                onClick={() => setBillingPeriod(p)}
-                style={{
-                  fontFamily: "Archivo, sans-serif", fontWeight: 600, fontSize: 12,
-                  color: billingPeriod === p ? "#4F46E5" : "#6B7280",
-                  backgroundColor: billingPeriod === p ? "#fff" : "transparent",
-                  border: "none", borderRadius: 8,
-                  padding: "6px 14px", cursor: "pointer", transition: "all 150ms",
-                  boxShadow: billingPeriod === p ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
-                }}
-              >
-                {p.charAt(0).toUpperCase() + p.slice(1)}
-                {p === "annual" && (
-                  <span style={{ marginLeft: 6, fontSize: 10, color: "#10B981", fontWeight: 700 }}>
-                    Save 20%
-                  </span>
-                )}
-              </button>
-            ))}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{
+              display: "flex", backgroundColor: "#F3F4F6",
+              borderRadius: 10, padding: 4, gap: 2,
+            }}>
+              {["monthly", "annual"].map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setBillingPeriod(p)}
+                  style={{
+                    fontFamily: "Archivo, sans-serif", fontWeight: 600, fontSize: 12,
+                    color: billingPeriod === p ? "#4F46E5" : "#6B7280",
+                    backgroundColor: billingPeriod === p ? "#fff" : "transparent",
+                    border: "none", borderRadius: 7,
+                    padding: "6px 16px", cursor: "pointer", transition: "all 150ms",
+                    boxShadow: billingPeriod === p ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {p.charAt(0).toUpperCase() + p.slice(1)}
+                </button>
+              ))}
+            </div>
+            <span style={{
+              fontFamily: "Archivo, sans-serif", fontSize: 11, fontWeight: 700,
+              color: "#059669", backgroundColor: "#ECFDF5",
+              border: "1px solid #A7F3D0",
+              padding: "3px 9px", borderRadius: 999,
+              opacity: billingPeriod === "annual" ? 1 : 0.4,
+              transition: "opacity 200ms",
+            }}>
+              Save 20%
+            </span>
           </div>
         </div>
 
