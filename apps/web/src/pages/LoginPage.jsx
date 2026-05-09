@@ -2,7 +2,7 @@ import HumoraVerificationModal from "@components/HumoraVerificationModal";
 import { useAuth } from "@context/AuthContext";
 import { requireSupabase } from "@utils/supabase";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // ── Fingerprint SVG Icon ─────────────────────────────────────
@@ -611,7 +611,7 @@ function PrimaryButton({ children, onClick, loading, type = "button" }) {
 export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const from = location.state?.from?.pathname || "/dashboard";
 
   const [email, setEmail] = useState("");
@@ -622,6 +622,12 @@ export function LoginPage() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [showVerification, setShowVerification] = useState(false);
+
+  // Redirect as soon as auth state confirms the user is logged in.
+  // This avoids the race where navigate() fires before setUser() re-renders.
+  useEffect(() => {
+    if (isAuthenticated) navigate(from, { replace: true });
+  }, [isAuthenticated, navigate, from]);
 
   const validate = () => {
     const errs = {};
@@ -650,14 +656,14 @@ export function LoginPage() {
       setLoading(true);
       try {
         await login(email, password, remember);
-        navigate(from, { replace: true });
+        // Navigation happens via the isAuthenticated useEffect above
       } catch (err) {
         setError(err.message || "Invalid email or password. Try again.");
       } finally {
         setLoading(false);
       }
     },
-    [email, password, remember, login, navigate, from]
+    [email, password, remember, login]
   );
 
   return (
@@ -1024,7 +1030,7 @@ function PasswordStrength({ password }) {
 
 export function SignupPage() {
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { signup, isAuthenticated } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -1033,6 +1039,10 @@ export function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [showVerification, setShowVerification] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/onboarding", { replace: true });
+  }, [isAuthenticated, navigate]);
 
   const validate = () => {
     const errs = {};
@@ -1063,7 +1073,7 @@ export function SignupPage() {
       setLoading(true);
       try {
         await signup(name, email, password);
-        navigate("/onboarding");
+        // Navigation happens via the isAuthenticated useEffect above
       } catch (err) {
         const msg = err.message || "";
         if (msg.includes("already exists") || msg.includes("email-taken")) {
@@ -1077,7 +1087,7 @@ export function SignupPage() {
         setLoading(false);
       }
     },
-    [name, email, password, signup, navigate]
+    [name, email, password, signup]
   );
 
   return (
