@@ -21,3 +21,24 @@ export function ProtectedRoute({ children, adminOnly }) {
 
   return children
 }
+
+// Redirects already-authenticated users away from public-only pages (login, signup).
+// Uses <Navigate> inside the render cycle — never a useEffect — so it fires
+// synchronously with the setUser() update and avoids all race conditions.
+export function PublicRoute({ children, redirectTo }) {
+  const { isAuthenticated, loading } = useAuth()
+  const location = useLocation()
+
+  if (loading) return null
+
+  if (isAuthenticated) {
+    // Honour the "from" state set by ProtectedRoute, but never redirect to
+    // the root ("/") which would flash the landing page.
+    const raw = location.state?.from?.pathname
+    const to = redirectTo
+      ?? (raw && raw !== '/' && raw.startsWith('/') ? raw : '/dashboard')
+    return <Navigate to={to} replace />
+  }
+
+  return children
+}

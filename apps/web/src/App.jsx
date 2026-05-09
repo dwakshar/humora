@@ -1,5 +1,5 @@
 import { AuthProvider } from "@context/AuthContext";
-import { ProtectedRoute } from "@routes/ProtectedRoute";
+import { ProtectedRoute, PublicRoute } from "@routes/ProtectedRoute";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
@@ -119,17 +119,21 @@ function AppRoutes() {
         <Route
           path="/login"
           element={
-            <AnimatedPage>
-              <LoginPage />
-            </AnimatedPage>
+            <PublicRoute>
+              <AnimatedPage>
+                <LoginPage />
+              </AnimatedPage>
+            </PublicRoute>
           }
         />
         <Route
           path="/signup"
           element={
-            <AnimatedPage>
-              <SignupPage />
-            </AnimatedPage>
+            <PublicRoute redirectTo="/onboarding">
+              <AnimatedPage>
+                <SignupPage />
+              </AnimatedPage>
+            </PublicRoute>
           }
         />
         <Route
