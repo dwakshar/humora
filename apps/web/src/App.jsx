@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import OAuthCallbackPage from "@pages/OAuthCallbackPage";
 import DemoPage from "@pages/DemoPage";
 import DocsPage from "@pages/DocsPage";
+import QuickStartPage from "@pages/QuickStartPage";
 import ForgotPassword from "@pages/ForgotPasswordPage";
 import LandingPage from "@pages/LandingPage";
 import LoginPage from "@pages/LoginPage";
@@ -32,6 +33,7 @@ const PAGE_TITLES = {
   "/pricing": "Pricing — Humora",
   "/demo": "Live Demo — Humora",
   "/docs": "Documentation — Humora",
+  "/quickstart": "Quick Start — Humora",
   "/login": "Sign In — Humora",
   "/signup": "Get Started — Humora",
   "/forgot-password": "Reset Password — Humora",
@@ -113,6 +115,14 @@ function AppRoutes() {
           element={
             <AnimatedPage>
               <DocsPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/quickstart"
+          element={
+            <AnimatedPage>
+              <QuickStartPage />
             </AnimatedPage>
           }
         />

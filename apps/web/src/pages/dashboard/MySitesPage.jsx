@@ -314,7 +314,7 @@ function EyeButton({ visible, onToggle }) {
   );
 }
 
-function SiteCard({ site, onViewAnalytics, onDelete, deleting }) {
+function SiteCard({ site, onViewAnalytics, onGetCode, onDelete, deleting }) {
   const [showKey, setShowKey] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -439,6 +439,34 @@ function SiteCard({ site, onViewAnalytics, onDelete, deleting }) {
       {/* Actions row */}
       <div style={{ display: "flex", gap: 8 }}>
         <button
+          onClick={() => onGetCode(site)}
+          style={{
+            flex: 1,
+            fontFamily: "Archivo, sans-serif",
+            fontSize: 12,
+            fontWeight: 600,
+            color: "#4F46E5",
+            backgroundColor: "#EEF2FF",
+            border: "1px solid #C7D2FE",
+            borderRadius: 8,
+            padding: "8px 12px",
+            cursor: "pointer",
+            transition: "all 150ms",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 5,
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#E0E7FF"; e.currentTarget.style.borderColor = "#818CF8"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#EEF2FF"; e.currentTarget.style.borderColor = "#C7D2FE"; }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          Get Code
+        </button>
+        <button
           onClick={() => onViewAnalytics(site)}
           style={{
             flex: 1,
@@ -456,7 +484,7 @@ function SiteCard({ site, onViewAnalytics, onDelete, deleting }) {
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#E5E7EB"; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#F3F4F6"; }}
         >
-          View Analytics
+          Analytics
         </button>
         <button
           onClick={() => onDelete(site)}
@@ -476,7 +504,7 @@ function SiteCard({ site, onViewAnalytics, onDelete, deleting }) {
           onMouseEnter={(e) => { if (!deleting) { e.currentTarget.style.backgroundColor = "#EF4444"; e.currentTarget.style.color = "#fff"; } }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#FEF2F2"; e.currentTarget.style.color = "#EF4444"; }}
         >
-          {deleting ? "Deleting…" : "Delete"}
+          {deleting ? "…" : "Delete"}
         </button>
       </div>
     </motion.div>
@@ -936,12 +964,235 @@ function IntegrationSnippet({ site }) {
   );
 }
 
+const GC_FRAMEWORKS = [
+  { id: "HTML",    label: "HTML",    color: "#F97316", install: null,                             frontLang: "html",       backLang: "javascript" },
+  { id: "React",   label: "React",   color: "#0EA5E9", install: "npm install @humora-io/widget",  frontLang: "jsx",        backLang: "javascript" },
+  { id: "Next.js", label: "Next.js", color: "#0F0F0F", install: "npm install @humora-io/widget",  frontLang: "tsx",        backLang: "javascript" },
+  { id: "PHP",     label: "PHP",     color: "#8B5CF6", install: null,                             frontLang: "php",        backLang: "php"        },
+  { id: "Python",  label: "Python",  color: "#3B82F6", install: null,                             frontLang: "html",       backLang: "python"     },
+];
+
+function GCCopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); };
+  return (
+    <button onClick={copy} style={{
+      background: copied ? "rgba(16,185,129,.15)" : "rgba(255,255,255,.07)",
+      border: `1px solid ${copied ? "#10B981" : "rgba(255,255,255,.12)"}`,
+      borderRadius: 6, padding: "3px 10px",
+      fontFamily: "Archivo, sans-serif", fontSize: 11, fontWeight: 500,
+      color: copied ? "#10B981" : "#9CA3AF", cursor: "pointer",
+      transition: "all 150ms", display: "flex", alignItems: "center", gap: 5, flexShrink: 0,
+    }}>
+      {copied ? "Copied!" : "Copy"}
+    </button>
+  );
+}
+
+function GCCodeBlock({ code, lang, label }) {
+  const langColors = { html:"#F97316",javascript:"#EAB308",jsx:"#61DAFB",tsx:"#61DAFB",python:"#3B82F6",php:"#8B5CF6" };
+  return (
+    <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid #2d2d4e" }}>
+      <div style={{ background: "#13132a", borderBottom: "1px solid #2d2d4e",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "0 14px", minHeight: 40 }}>
+        <span style={{ fontFamily:"Archivo,sans-serif", fontSize:11, fontWeight:600,
+          color: langColors[lang]||"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.06em" }}>
+          {label || lang}
+        </span>
+        <GCCopyButton text={code} />
+      </div>
+      <div style={{ background:"#0d0d1a", padding:"16px 18px", overflowX:"auto" }}>
+        <pre style={{ fontFamily:"'Fira Code','Cascadia Code','Courier New',monospace",
+          fontSize:12, lineHeight:1.7, color:"#e2e8f0", margin:0, whiteSpace:"pre" }}>
+          {code}
+        </pre>
+      </div>
+    </div>
+  );
+}
+
+function GetCodePanelInner({ site, onClose }) {
+  const [fw, setFw] = useState("HTML");
+  const [tab, setTab] = useState("frontend"); // "frontend" | "backend"
+
+  const framework = GC_FRAMEWORKS.find(f => f.id === fw);
+  const snippets  = POPUP_HTML(site.sitekey);
+  const reactSnip = POPUP_REACT(site.sitekey);
+  const serverSnip = SERVER_SNIPPETS["Node.js"];
+
+  const frontendCode = fw === "HTML" ? POPUP_HTML(site.sitekey) : fw === "React" || fw === "Next.js" ? POPUP_REACT(site.sitekey) : fw === "PHP" ? `<?php\n// See backend tab — PHP handles both frontend and server-side in one file` : `{# Django template — add the script tag to your <head> #}\n<script src="https://widget.humora.io/humora.min.js" async defer></script>\n<div id="humora-widget"></div>\n<script>\n  humora.ready(function() {\n    humora.render('humora-widget', {\n      sitekey: '${site.sitekey}',\n      callback: function(t) { document.getElementById('h-token').value = t; },\n    });\n  });\n</script>`;
+
+  const backendCode = fw === "PHP"
+    ? SERVER_SNIPPETS["PHP"]
+    : fw === "Python"
+    ? SERVER_SNIPPETS["Python"]
+    : SERVER_SNIPPETS["Node.js"];
+
+  const backLang = fw === "PHP" ? "php" : fw === "Python" ? "python" : "javascript";
+
+  return (
+    <>
+      <motion.div
+        key="gc-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={onClose}
+        style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", zIndex: 200 }}
+      />
+      <motion.div
+        key="gc-panel"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          position: "fixed", top: 0, right: 0, bottom: 0,
+          width: 520, backgroundColor: "#fff",
+          boxShadow: "-8px 0 40px rgba(0,0,0,0.14)",
+          zIndex: 201, display: "flex", flexDirection: "column",
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "20px 24px", borderBottom: "1px solid #E5E7EB", flexShrink: 0,
+        }}>
+          <div>
+            <h2 style={{ fontFamily: "Archivo, sans-serif", fontWeight: 800, fontSize: 18, color: "#0F0F0F", margin: 0 }}>
+              Integration Code
+            </h2>
+            <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 13, color: "#6B7280", margin: "3px 0 0" }}>
+              {site.domain} · Your sitekey is pre-filled
+            </p>
+          </div>
+          <button onClick={onClose} style={{
+            background: "none", border: "none", cursor: "pointer", padding: 8,
+            color: "#6B7280", borderRadius: 8, transition: "background 150ms",
+            display: "flex", alignItems: "center",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F3F4F6")}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Framework selector */}
+        <div style={{ padding: "16px 24px 0", flexShrink: 0 }}>
+          <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 11, fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+            Framework
+          </p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {GC_FRAMEWORKS.map(f => (
+              <button key={f.id} onClick={() => { setFw(f.id); setTab("frontend"); }} style={{
+                fontFamily: "Archivo, sans-serif", fontSize: 12, fontWeight: fw === f.id ? 700 : 500,
+                color: fw === f.id ? f.color : "#6B7280",
+                background: fw === f.id ? f.color + "18" : "transparent",
+                border: `1.5px solid ${fw === f.id ? f.color + "55" : "#E5E7EB"}`,
+                borderRadius: 8, padding: "6px 14px", cursor: "pointer", transition: "all 120ms",
+              }}>
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Install command */}
+          {framework.install && (
+            <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 10,
+              background: "#0d0d1a", border: "1px solid #2d2d4e",
+              borderRadius: 9, padding: "9px 14px", cursor: "pointer" }}
+              onClick={() => { navigator.clipboard.writeText(framework.install); }}
+              title="Click to copy"
+            >
+              <code style={{ fontFamily: "'Fira Code','Cascadia Code','Courier New',monospace", fontSize: 12, color: "#e2e8f0", flex: 1 }}>
+                {framework.install}
+              </code>
+              <span style={{ fontFamily: "Archivo, sans-serif", fontSize: 11, color: "#9CA3AF", flexShrink: 0 }}>
+                Copy
+              </span>
+            </div>
+          )}
+
+          {/* Frontend / Backend tab toggle */}
+          <div style={{ display: "flex", gap: 4, marginTop: 16, marginBottom: 0, borderBottom: "1px solid #E5E7EB" }}>
+            {["frontend", "backend"].map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                fontFamily: "Archivo, sans-serif", fontSize: 13,
+                fontWeight: tab === t ? 700 : 500,
+                color: tab === t ? "#4F46E5" : "#6B7280",
+                background: "none", border: "none",
+                borderBottom: `2px solid ${tab === t ? "#4F46E5" : "transparent"}`,
+                padding: "8px 14px 10px", cursor: "pointer", transition: "all 150ms",
+                textTransform: "capitalize",
+              }}>
+                {t === "backend" ? "Server (required)" : "Frontend"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Code area */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px 24px" }}>
+          {tab === "frontend" ? (
+            <GCCodeBlock
+              code={frontendCode}
+              lang={framework.frontLang}
+              label={fw === "HTML" ? "HTML + JS" : fw === "React" ? "JSX" : fw === "Next.js" ? "TSX" : fw}
+            />
+          ) : (
+            <>
+              <div style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "10px 14px",
+                background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, marginBottom: 12 }}>
+                <span style={{ fontSize: 13, flexShrink: 0 }}>🚨</span>
+                <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 12, color: "#991B1B", margin: 0, lineHeight: 1.5 }}>
+                  <strong>Mandatory.</strong> Without server-side verification, bots can bypass the widget.
+                </p>
+              </div>
+              <GCCodeBlock code={backendCode} lang={backLang} label={fw === "Python" ? "Python" : fw === "PHP" ? "PHP" : "Node.js"} />
+            </>
+          )}
+
+          <div style={{ marginTop: 16, display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <a href="/quickstart" style={{
+              fontFamily: "Archivo, sans-serif", fontSize: 12, fontWeight: 600,
+              color: "#4F46E5", textDecoration: "none",
+            }}>
+              Quick Start guide →
+            </a>
+            <span style={{ color: "#E5E7EB" }}>·</span>
+            <a href="/docs" style={{
+              fontFamily: "Archivo, sans-serif", fontSize: 12, fontWeight: 500,
+              color: "#6B7280", textDecoration: "none",
+            }}>
+              Full docs
+            </a>
+          </div>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
+function GetCodePanel({ site, onClose }) {
+  return (
+    <AnimatePresence>
+      {site && <GetCodePanelInner key={site.sitekey} site={site} onClose={onClose} />}
+    </AnimatePresence>
+  );
+}
+
 export default function MySitesPage() {
   const [sites, setSites]           = useState([]);
   const [loading, setLoading]       = useState(true);
   const [deletingKey, setDeletingKey] = useState(null);
   const [panelOpen, setPanelOpen]   = useState(false);
   const [selectedSite, setSelectedSite] = useState(null);
+  const [codesite, setCodeSite]     = useState(null);
   const [error, setError]           = useState(null);
 
   const loadSites = useCallback(() => {
@@ -1075,6 +1326,7 @@ export default function MySitesPage() {
               key={site.sitekey}
               site={site}
               onViewAnalytics={handleViewAnalytics}
+              onGetCode={(s) => setCodeSite(s)}
               onDelete={handleDeleteSite}
               deleting={deletingKey === site.sitekey}
             />
@@ -1082,7 +1334,7 @@ export default function MySitesPage() {
         </div>
       )}
 
-      {/* Integration snippet */}
+      {/* Integration snippet (legacy inline panel — still shown for selected site) */}
       {selectedSite && <IntegrationSnippet site={selectedSite} />}
 
       {/* Add Site Panel */}
@@ -1091,6 +1343,9 @@ export default function MySitesPage() {
         onClose={() => setPanelOpen(false)}
         onAdd={handleAddSite}
       />
+
+      {/* Get Code slide-over */}
+      <GetCodePanel site={codesite} onClose={() => setCodeSite(null)} />
     </div>
   );
 }
