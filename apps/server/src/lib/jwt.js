@@ -24,11 +24,11 @@ export async function verifyWidgetToken(token) {
   }
 }
 
-export async function signAuthToken(userId, role) {
+export async function signAuthToken(userId, role, expiresIn) {
   const jti = randomUUID();
   return new SignJWT({ userId, role, jti })
     .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime(process.env.AUTH_JWT_EXPIRES_IN || '7d')
+    .setExpirationTime(expiresIn ?? process.env.AUTH_JWT_EXPIRES_IN ?? '7d')
     .sign(getSecret());
 }
 

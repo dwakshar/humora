@@ -81,7 +81,7 @@ router.post('/signup', authLimiter, async (req, res, next) => {
 
 router.post('/login', authLimiter, async (req, res, next) => {
   try {
-    const { email, password } = req.body ?? {};
+    const { email, password, rememberMe } = req.body ?? {};
 
     if (!email?.trim() || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
@@ -92,7 +92,7 @@ router.post('/login', authLimiter, async (req, res, next) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = await signAuthToken(user.id, user.role);
+    const token = await signAuthToken(user.id, user.role, rememberMe ? '30d' : undefined);
     return res.status(200).json({ user: safeUser(user), token });
   } catch (err) {
     next(err);

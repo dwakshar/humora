@@ -27,20 +27,26 @@ export function AuthProvider({ children }) {
     if (token) {
       api.auth.me()
         .then(setUser)
-        .catch(() => localStorage.removeItem('humora_auth_token'))
+        .catch((err) => {
+          // Only evict the token when it is explicitly rejected (401/403).
+          // Network errors or server outages should not log the user out.
+          if (err?.status === 401 || err?.status === 403 || /invalid|expired/i.test(err?.message)) {
+            localStorage.removeItem('humora_auth_token')
+          }
+        })
         .finally(() => setLoading(false))
     } else {
       setLoading(false)
     }
   }, [])
 
-  const login = async (email, password) => {
+  const login = async (email, password, rememberMe = false) => {
     if (isMockCredentials(email)) {
       localStorage.setItem('humora_auth_token', '__mock__')
       setUser(MOCK_USER)
       return MOCK_USER
     }
-    const { user: u, token } = await api.auth.login(email, password)
+    const { user: u, token } = await api.auth.login(email, password, rememberMe)
     localStorage.setItem('humora_auth_token', token)
     setUser(u)
     return u

@@ -649,7 +649,7 @@ export function LoginPage() {
       setShowVerification(false);
       setLoading(true);
       try {
-        await login(email, password);
+        await login(email, password, remember);
         navigate(from, { replace: true });
       } catch (err) {
         setError(err.message || "Invalid email or password. Try again.");
@@ -657,7 +657,7 @@ export function LoginPage() {
         setLoading(false);
       }
     },
-    [email, password, login, navigate, from]
+    [email, password, remember, login, navigate, from]
   );
 
   return (

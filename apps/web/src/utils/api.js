@@ -27,7 +27,7 @@ export const api = {
   delete: (url) => request(url, { method: 'DELETE' }),
 
   auth: {
-    login: (email, pass) => api.post('/api/auth/login', { email, password: pass }),
+    login: (email, pass, rememberMe) => api.post('/api/auth/login', { email, password: pass, rememberMe: !!rememberMe }),
     signup: (name, email, pass) => api.post('/api/auth/signup', { name, email, password: pass }),
     logout: () => api.post('/api/auth/logout', {}),
     me: async () => (await api.get('/api/auth/me')).user,
