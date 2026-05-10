@@ -246,11 +246,15 @@ export default function SupportPage() {
   return (
     <div style={{ fontFamily: "Archivo, sans-serif", maxWidth: 900 }}>
       {/* Header */}
-      <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0F0F0F", margin: 0 }}>Support</h1>
-        <p style={{ fontSize: 14, color: "#6B7280", marginTop: 4 }}>
-          We're here to help. Choose the fastest channel for your issue.
-        </p>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 32 }}>
+        <div>
+          <h1 style={{ fontFamily: "Archivo, sans-serif", fontSize: 26, fontWeight: 800, color: "#0F0F0F", margin: "0 0 6px" }}>
+            Support
+          </h1>
+          <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 15, color: "#6B7280", margin: 0 }}>
+            We're here to help. Choose the fastest channel for your issue.
+          </p>
+        </div>
       </div>
 
       {/* Contact channels */}

@@ -578,10 +578,10 @@ export default function ApiKeysPage() {
       {/* ── Header ── */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: "#0F0F0F", margin: "0 0 6px", letterSpacing: "-0.01em" }}>
+          <h1 style={{ fontFamily: "Archivo, sans-serif", fontSize: 26, fontWeight: 800, color: "#0F0F0F", margin: "0 0 6px" }}>
             API Keys
           </h1>
-          <p style={{ fontSize: 14, color: "#6B7280", margin: 0 }}>
+          <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 15, color: "#6B7280", margin: 0 }}>
             Use API keys to authenticate server-side calls to the Humora API.
           </p>
         </div>

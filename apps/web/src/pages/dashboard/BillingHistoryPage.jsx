@@ -110,11 +110,15 @@ export default function BillingHistoryPage() {
   return (
     <div style={{ fontFamily: "Archivo, sans-serif", maxWidth: 900 }}>
       {/* Header */}
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0F0F0F", margin: 0 }}>Billing History</h1>
-        <p style={{ fontSize: 14, color: "#6B7280", marginTop: 4 }}>
-          All your past payments and invoices in one place.
-        </p>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 28 }}>
+        <div>
+          <h1 style={{ fontFamily: "Archivo, sans-serif", fontSize: 26, fontWeight: 800, color: "#0F0F0F", margin: "0 0 6px" }}>
+            Billing History
+          </h1>
+          <p style={{ fontFamily: "Archivo, sans-serif", fontSize: 15, color: "#6B7280", margin: 0 }}>
+            All your past payments and invoices in one place.
+          </p>
+        </div>
       </div>
 
       {/* Summary cards */}
